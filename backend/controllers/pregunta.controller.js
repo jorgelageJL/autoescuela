@@ -1,31 +1,32 @@
 const db = require("../models");
-const Profesor = db.Profesor;
+const Pregunta = db.Pregunta;
 const Op = db.Sequelize.Op;
 // const utils = require("../utils.js");
 // const  bcrypt  =  require('bcryptjs');
 
-// Create new Profesor
+// Create a new Pregunta
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.nombre || !req.body.apellidos || !req.body.dni
-    || !req.body.email || !req.body.password || !req.body.id_admin) {
+  if (!req.body.enunciado || !req.body.opcion_a || !req.body.opcion_b ||
+    !req.body.opcion_c || !req.body.respuesta || !req.body.tema || !req.body.id_test) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
     return;
   }
 
-  // Create Profesor
-  const profesor = {
-    nombre: req.body.nombre,
-    apellidos: req.body.apellidos,
-    dni: req.body.dni,
-    email: req.body.email,
-    password: req.body.password,
-    id_admin: req.body.id_admin
+  // Create a Pregunta
+  const pregunta = {
+    enunciado: req.body.enunciado,
+    opcion_a: req.body.opcion_a,
+    opcion_b: req.body.opcion_b,
+    opcion_c: req.body.opcion_c,
+    respuesta: req.body.respuesta,
+    tema: req.body.tema,
+    id_test: req.body.id_test
   };
 
-  // Profesor.findOne({ where: { dni: Profesor.dni } })
+  // Pregunta.findOne({ where: { dni: Pregunta.dni } })
   //   .then(data => {
   //     if (data) {
   //       const result = bcrypt.compareSync(Profesor.password, data.password);
@@ -39,8 +40,8 @@ exports.create = (req, res) => {
 
   //     administrador.password = bcrypt.hashSync(req.body.password);
 
-  // Save new Administrador in the database
-  Profesor.create(profesor)
+  // Save new Pregunta in the database
+  Pregunta.create(pregunta)
     .then(data => {
       // const token = utils.generateToken(data);
       // get basic user details
@@ -52,7 +53,7 @@ exports.create = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Profesor."
+          err.message || "Some error occurred while creating the Pregunta."
       });
     });
 
@@ -65,130 +66,126 @@ exports.create = (req, res) => {
   // });
 };
 
-// Retrieve all Profesors from the database.
+// Retrieve all Preguntas from the database.
 exports.findAll = (req, res) => {
-  Profesor.findAll()
+  Pregunta.findAll()
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving Profesors."
+          err.message || "Some error occurred while retrieving Preguntas."
       });
     });
 };
 
-// Find a single Profesor by id
+// Find a single Pregunta by id
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Profesor.findByPk(id)
+  Pregunta.findByPk(id)
     .then(data => {
       if (data) {
         res.send(data);
       } else {
         res.send({
-          message: `Profesor with id=${id} was not found.`
+          message: `Pregunta with id=${id} was not found.`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error retrieving Profesor with id=" + id
+        message: "Error retrieving Pregunta with id=" + id
       });
     });
 };
 
-// Find Profesor by password and dni or email
-exports.findByPasswordAndDniOrEmail = (req, res) => {
+// Find a Pregunta by enunciado
+exports.findByName = (req, res) => {
   // Validate request
-  if (!req.body.password || !req.body.dni && !req.body.email) {
+  if (!req.body.enunciado) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
     return;
   }
 
-  const password = req.body.password;
-  const dni = req.body.dni;
-  const condition = dni ? { dni: dni, password: password } : { email: req.body.email, password: password };
-
-  Profesor.findOne({ where: condition })
+  Pregunta.findOne({ where: { enunciado: req.body.enunciado } })
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving a Profesor."
+          err.message || "Some error occurred while retrieving a Pregunta."
       });
     });
 };
 
-// Update Profesor by id
+// Update Pregunta by id
 exports.update = (req, res) => {
   const id = req.params.id;
 
-  Profesor.update(req.body, {
-    where: { id_profesor: id }
+  Pregunta.update(req.body, {
+    where: { id_pregunta: id }
   })
     .then(num => {
       if (num == 1) {
         res.send({
-          message: "Profesor was updated successfully."
+          message: "Pregunta was updated successfully."
         });
       } else {
         res.send({
-          message: `Cannot update Profesor with id=${id}. Maybe Profesor was not found or req.body is empty!`
+          message: `Cannot update Pregunta with id=${id}. Maybe Pregunta was not found or req.body is empty!`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error updating Profesor with id=" + id
+        message: "Error updating Pregunta with id=" + id
       });
     });
 };
 
-// Delete Profesor by id
+// Delete Pregunta by id
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Profesor.destroy({
-    where: { id_profesor: id }
+  Pregunta.destroy({
+    where: { id_pregunta: id }
   })
     .then(num => {
       if (num == 1) {
         res.send({
-          message: "Profesor was deleted successfully!"
+          message: "Pregunta was deleted successfully!"
         });
       } else {
         res.send({
-          message: `Cannot delete Profesor with id=${id}. Maybe Profesor was not found!`
+          message: `Cannot delete Pregunta with id=${id}. Maybe Pregunta was not found!`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Could not delete Profesor with id=" + id
+        message: "Could not delete Pregunta with id=" + id
       });
     });
 };
 
-// Delete all Profesors from the database.
+// Delete all Preguntas from the database.
 exports.deleteAll = (req, res) => {
-  Profesor.destroy({
+  Pregunta.destroy({
     where: {},
     truncate: false
   })
     .then(nums => {
-      res.send({ message: `${nums} Profesors were deleted successfully!` });
+      res.send({ message: `${nums} Preguntas were deleted successfully!` });
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all Profesors."
+          err.message || "Some error occurred while removing all Preguntas."
       });
     });
 };

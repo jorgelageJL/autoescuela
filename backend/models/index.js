@@ -35,9 +35,11 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.Administrador = require("./administrador.model.js")(sequelize, Sequelize);
+db.Test = require("./test.model.js")(sequelize, Sequelize);
+db.Pregunta = require("./pregunta.model.js")(sequelize, Sequelize);
 db.Profesor = require("./profesor.model.js")(sequelize, Sequelize);
 db.Alumno = require("./alumno.model.js")(sequelize, Sequelize);
-db.Test = require("./test.model.js")(sequelize, Sequelize);
+db.Resultado = require("./resultado.model.js")(sequelize, Sequelize);
 
 /**
  * RELACIÓN ONE TO MANY
@@ -54,6 +56,26 @@ db.Administrador.hasMany(db.Test, {
 db.Test.belongsTo(db.Administrador, {
   foreignKey: {
     name: 'id_admin',
+    allowNull: false
+  },
+  onDelete: 'CASCADE'
+});
+
+/**
+ * RELACIÓN ONE TO MANY
+ * Test -> Preguntas
+ */
+db.Test.hasMany(db.Pregunta, {
+  foreignKey: {
+    name: 'id_test',
+    allowNull: false
+  },
+  onDelete: 'CASCADE'
+});
+
+db.Pregunta.belongsTo(db.Test, {
+  foreignKey: {
+    name: 'id_test',
     allowNull: false
   },
   onDelete: 'CASCADE'
@@ -101,10 +123,10 @@ db.Alumno.belongsTo(db.Profesor, {
 
 /**
  * RELACIÓN MANY TO MANY
- * Alumno -> Test
+ * Alumno <-> Test
  */
 db.Alumno.belongsToMany(db.Test, {
-  through: "resultado_test",
+  through: db.Resultado,
   foreignKey: {
     name: 'id_alumno',
     allowNull: false
@@ -113,7 +135,7 @@ db.Alumno.belongsToMany(db.Test, {
 });
 
 db.Test.belongsToMany(db.Alumno, {
-  through: "resultado_test",
+  through: db.Resultado,
   foreignKey: {
     name: 'id_test',
     allowNull: false
