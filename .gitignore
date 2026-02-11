@@ -71,6 +71,7 @@ $RECYCLE.BIN/
 
 # Environment files
 /frontend/.env
+/backend/.env
 
 
 # TypeScript cache
