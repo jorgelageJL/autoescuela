@@ -1,33 +1,34 @@
 const db = require("../models");
-const Administrador = db.Administrador;
+const Alumno = db.Alumno;
 const Op = db.Sequelize.Op;
 // const utils = require("../utils.js");
 // const  bcrypt  =  require('bcryptjs');
 
-// Create a new Administrador
+// Create a new Alumno
 exports.create = (req, res) => {
   // Validate request
   if (!req.body.nombre || !req.body.apellidos || !req.body.dni
-    || !req.body.email || !req.body.password) {
+    || !req.body.email || !req.body.password || !req.body.id_profesor) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
     return;
   }
 
-  // Create an Administrador
-  const administrador = {
+  // Create an Alumno
+  const alumno = {
     nombre: req.body.nombre,
     apellidos: req.body.apellidos,
     dni: req.body.dni,
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
+    id_profesor: req.body.id_profesor
   };
 
-  // Administrador.findOne({ where: { dni: administrador.dni } })
+  // Alumno.findOne({ where: { dni: Alumno.dni } })
   //   .then(data => {
   //     if (data) {
-  //       const result = bcrypt.compareSync(administrador.password, data.password);
+  //       const result = bcrypt.compareSync(Profesor.password, data.password);
   //       if (!result) return res.status(401).send('Password not valid!');
   //       const token = utils.generateToken(data);
   //       // get basic user details
@@ -38,8 +39,8 @@ exports.create = (req, res) => {
 
   //     administrador.password = bcrypt.hashSync(req.body.password);
 
-  // Save new Administrador in the database
-  Administrador.create(administrador)
+  // Save new Alumno in the database
+  Alumno.create(alumno)
     .then(data => {
       // const token = utils.generateToken(data);
       // get basic user details
@@ -51,7 +52,7 @@ exports.create = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Administrador."
+          err.message || "Some error occurred while creating the Alumno."
       });
     });
 
@@ -64,58 +65,42 @@ exports.create = (req, res) => {
   // });
 };
 
-// Retrieve all Administradors from the database.
+// Retrieve all Alumno from the database.
 exports.findAll = (req, res) => {
-  Administrador.findAll()
+  Alumno.findAll()
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving Administradors."
+          err.message || "Some error occurred while retrieving Alumnos."
       });
     });
 };
 
-// Find a single Administrador by id
+// Find a single Alumno by id
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Administrador.findByPk(id)
+  Alumno.findByPk(id)
     .then(data => {
       if (data) {
         res.send(data);
       } else {
         res.send({
-          message: `Administrador with id=${id} was not found.`
+          message: `Alumno with id=${id} was not found.`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error retrieving Administrador with id=" + id
+        message: "Error retrieving Alumno with id=" + id
       });
     });
 };
 
-// Find Administrador by dni or email
-exports.findByDniOrEmail = (req, res) => {
-  const field = req.params.field
-
-  Administrador.findOne({ where: { dni: field } || { email: field } })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving an Administrador."
-      });
-    });
-};
-
-// Find an Administrador by password and dni or email
+// Find an Alumno by password and dni or email
 exports.findByPasswordAndDniOrEmail = (req, res) => {
   // Validate request
   if (!req.body.password || !req.body.dni && !req.body.email) {
@@ -129,95 +114,81 @@ exports.findByPasswordAndDniOrEmail = (req, res) => {
   const dni = req.body.dni;
   const condition = dni ? { dni: dni, password: password } : { email: req.body.email, password: password };
 
-  Administrador.findOne({ where: condition })
+  Alumno.findOne({ where: condition })
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving an Administrador."
+          err.message || "Some error occurred while retrieving an Alumno."
       });
     });
 };
 
-// Update an Administrador by id
+// Update an Alumno by id
 exports.update = (req, res) => {
   const id = req.params.id;
 
-  Administrador.update(req.body, {
-    where: { id_admin: id }
+  Alumno.update(req.body, {
+    where: { id_alumno: id }
   })
     .then(num => {
       if (num == 1) {
         res.send({
-          message: "Administrador was updated successfully."
+          message: "Alumno was updated successfully."
         });
       } else {
         res.send({
-          message: `Cannot update Administrador with id=${id}. Maybe Administrador was not found or req.body is empty!`
+          message: `Cannot update Alumno with id=${id}. Maybe Alumno was not found or req.body is empty!`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error updating Administrador with id=" + id
+        message: "Error updating Alumno with id=" + id
       });
     });
 };
 
-// Delete an Administrador by id
+// Delete an Alumno by id
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Administrador.destroy({
-    where: { id_admin: id }
+  Alumno.destroy({
+    where: { id_alumno: id }
   })
     .then(num => {
       if (num == 1) {
         res.send({
-          message: "Administrador was deleted successfully!"
+          message: "Alumno was deleted successfully!"
         });
       } else {
         res.send({
-          message: `Cannot delete Administrador with id=${id}. Maybe Administrador was not found!`
+          message: `Cannot delete Alumno with id=${id}. Maybe Alumno was not found!`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Could not delete Administrador with id=" + id
+        message: "Could not delete Alumno with id=" + id
       });
     });
 };
 
-// Delete all Administradors from the database.
+// Delete all Alumnos from the database.
 exports.deleteAll = (req, res) => {
-  Administrador.destroy({
+  Alumno.destroy({
     where: {},
     truncate: false
   })
     .then(nums => {
-      res.send({ message: `${nums} Administradors were deleted successfully!` });
+      res.send({ message: `${nums} Alumnos were deleted successfully!` });
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all Administradors."
+          err.message || "Some error occurred while removing all Alumnos."
       });
     });
 };
-
-// // Find all published Tutorials
-// exports.findAllPublished = (req, res) => {
-//   User.findAll({ where: { published: true } })
-//     .then(data => {
-//       res.send(data);
-//     })
-//     .catch(err => {
-//       res.status(500).send({
-//         message:
-//           err.message || "Some error occurred while retrieving tutorials."
-//       });
-//     });
-// };

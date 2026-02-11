@@ -19,7 +19,9 @@ app.get("/", (req, res) => {
 
 
 require("./routes/administrador.routes.js")(app);
-// require("./routes/bicycle.routes")(app);
+require("./routes/profesor.routes")(app);
+require("./routes/alumno.routes")(app);
+require("./routes/test.routes")(app);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

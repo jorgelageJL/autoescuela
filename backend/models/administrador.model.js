@@ -1,5 +1,12 @@
 module.exports = (sequelize, Sequelize) => {
   const Administrador = sequelize.define("administrador", {
+    id_admin: {
+      // type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      allowNull: false,
+      autoIncrement: true,
+    },
     nombre: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -25,6 +32,6 @@ module.exports = (sequelize, Sequelize) => {
   }, {
     timestamps: false
   });
-
+  
   return Administrador;
 };
