@@ -58,17 +58,15 @@ ionic serve
 
 ### Documentación de apoyo ⌨️
 
-_
+```
 https://sequelize.org/docs/v6/core-concepts/assocs/
 https://www.bezkoder.com/node-js-express-sequelize-mysql/
 https://www.bezkoder.com/sequelize-associate-one-to-many/
 https://github.com/tcrurav/Many2OneExpress
 https://www.bezkoder.com/sequelize-associate-many-to-many/
-_
+```
 
-```
-Conceptos de asociaciones con ejemplos prácticos
-```
+_Conceptos de asociaciones con ejemplos prácticos_
 
 ## Despliegue en GitHub 📦
 
