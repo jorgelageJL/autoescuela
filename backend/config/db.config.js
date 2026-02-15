@@ -3,7 +3,7 @@ require('dotenv').config();
 module.exports = {
   HOST: "localhost",
   USER: "root",
-  PASSWORD: "1234",
+  PASSWORD: "root",
   DB: "autoescuela_db",
   dialect: "mysql",
   pool: {

@@ -1,0 +1,36 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Tests</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="getAllTests()">
+    <ion-refresher-content pullingText="Pull to refresh"></ion-refresher-content>
+  </ion-refresher>
+<ion-button expand="block" color="primary" (click)="irHome()">
+  Volver al Menú de entrada
+</ion-button>
+  
+  <ion-list *ngIf="tests.length > 0; else noTests">
+    <ion-item *ngFor="let test of tests">
+  <ion-label>
+    <h2>{{ test.nombre }}</h2>
+  </ion-label>
+
+  <ion-button 
+    slot="end" 
+    color="primary"
+    (click)="hacerTest(test.id_test)">
+    Hacer test
+  </ion-button>
+	</ion-item>
+  </ion-list>
+
+  <ng-template #noTests>
+    <div class="no-tests">
+      No hay tests disponibles.
+    </div>
+  </ng-template>
+</ion-content>

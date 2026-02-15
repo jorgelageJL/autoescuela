@@ -1,17 +1,23 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+var corsOptions = {
+	origin: "http://localhost:8100"
+};
+
 const db = require("./models");
 // normal use. Doesn't delete the database data
-// db.sequelize.sync();
+db.sequelize.sync();
 
-// In development, you may need to drop existing tables and re-sync database
-// db.sequelize.sync({ force: true }).then(() => {
-//   console.log("Drop and re-sync db.");
-// });
+//In development, you may need to drop existing tables and re-sync database
+ //db.sequelize.sync(({ force: true }).then(() => {
+ //  console.log("Drop and re-sync db.");
+//});)
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to autoescuela application."});
@@ -24,6 +30,7 @@ require("./routes/pregunta.routes")(app);
 require("./routes/profesor.routes")(app);
 require("./routes/alumno.routes")(app);
 require("./routes/resultado.routes")(app);
+
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

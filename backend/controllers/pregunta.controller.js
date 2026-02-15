@@ -4,6 +4,21 @@ const Op = db.Sequelize.Op;
 // const utils = require("../utils.js");
 // const  bcrypt  =  require('bcryptjs');
 
+// Find by Test
+exports.findByTest = (req, res) => {
+  const id = req.params.id;
+
+  Pregunta.findAll({
+    where: { id_test: id }
+  })
+    .then(data => res.send(data))
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving Preguntas for test id=" + id
+      });
+    });
+};
+
 // Create a new Pregunta
 exports.create = (req, res) => {
   // Validate request

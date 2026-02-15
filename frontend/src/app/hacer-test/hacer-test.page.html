@@ -1,0 +1,69 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Preguntas del Test</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+<ion-list *ngIf="preguntas.length > 0">
+
+  <ion-item *ngFor="let pregunta of preguntas">
+    <ion-label>
+      <h2>{{ pregunta.enunciado }}</h2>
+
+      <div class="opcion"
+           [ngClass]="getClase(pregunta, 'A')"
+           (click)="responder(pregunta, 'A')">
+        A) {{ pregunta.opcion_a }}
+      </div>
+
+      <div class="opcion"
+           [ngClass]="getClase(pregunta, 'B')"
+           (click)="responder(pregunta, 'B')">
+        B) {{ pregunta.opcion_b }}
+      </div>
+
+      <div class="opcion"
+           [ngClass]="getClase(pregunta, 'C')"
+           (click)="responder(pregunta, 'C')">
+        C) {{ pregunta.opcion_c }}
+      </div>
+
+    </ion-label>
+  </ion-item>
+
+</ion-list>
+<ion-button expand="block" (click)="finalizarTest()" *ngIf="!mostrarResultado">
+  Finalizar Test
+</ion-button>
+
+<div class="resultado-container" *ngIf="mostrarResultado">
+
+  <div class="resultado-card">
+
+    <h2>Resultado Final</h2>
+
+    <div class="nota">
+      {{ nota }} / {{ preguntas.length }}
+    </div>
+
+    <div 
+      class="estado"
+      [ngClass]="nota >= 7 ? 'aprobado' : 'suspenso'">
+      {{ nota >= 7 ? 'APROBADO ✅' : 'SUSPENSO ❌' }}
+    </div>
+  </div>
+</div>
+
+	<ion-button expand="block" color="primary" (click)="volver()">
+      Volver a los tests
+    </ion-button>
+
+  <ng-template #sinPreguntas>
+    <div style="text-align:center; margin-top:20px;">
+      No hay preguntas para este test.
+    </div>
+  </ng-template>
+
+</ion-content>
