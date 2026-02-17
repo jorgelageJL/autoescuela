@@ -7,7 +7,7 @@ const Op = db.Sequelize.Op;
 // Create a new Test
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.nombre || !req.body.id_admin) {
+ if (!req.body.nombre || !req.body.id_admin) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
@@ -16,9 +16,9 @@ exports.create = (req, res) => {
 
   // Create a Test
   const test = {
-    nombre: req.body.nombre,
-    id_admin: req.body.id_admin
-  };
+  nombre: req.body.nombre,
+  id_admin: req.body.id_admin
+};
 
   // Test.findOne({ where: { dni: Test.dni } })
   //   .then(data => {

@@ -1,7 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
   const Test = sequelize.define("test", {
     id_test: {
-      // type: DataTypes.INTEGER,
       type: Sequelize.INTEGER,
       primaryKey: true,
       allowNull: false,
@@ -12,6 +11,10 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
       unique: true,
     },
+    id_admin: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    }
   }, {
     timestamps: false
   });
