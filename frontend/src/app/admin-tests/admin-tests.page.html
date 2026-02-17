@@ -1,0 +1,136 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="volver()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Gestión de Preguntas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+<!-- CREAR TEST -->
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>Crear Test</ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+
+    <ion-item>
+      <ion-label position="floating">Nombre del Test</ion-label>
+      <ion-input [(ngModel)]="nuevoTest.nombre"></ion-input>
+    </ion-item>
+
+    <ion-button 
+      expand="block" 
+      color="success" 
+      class="ion-margin-top"
+      (click)="crearTest()">
+      Crear Test
+    </ion-button>
+
+  </ion-card-content>
+</ion-card>
+  <!-- SELECT TEST -->
+<ion-item>
+  <ion-label>Test</ion-label>
+  <ion-select 
+    [(ngModel)]="pregunta.id_test"
+    (ionChange)="onTestChange($event)">
+    
+    <ion-select-option 
+      *ngFor="let test of tests"
+      [value]="test.id_test">
+      {{ test.nombre }}
+    </ion-select-option>
+
+  </ion-select>
+</ion-item>
+
+  <!-- FORMULARIO -->
+  <ion-item>
+    <ion-label position="floating">Enunciado</ion-label>
+    <ion-input [(ngModel)]="pregunta.enunciado"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Opción A</ion-label>
+    <ion-input [(ngModel)]="pregunta.opcion_a"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Opción B</ion-label>
+    <ion-input [(ngModel)]="pregunta.opcion_b"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Opción C</ion-label>
+    <ion-input [(ngModel)]="pregunta.opcion_c"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Respuesta Correcta</ion-label>
+    <ion-input [(ngModel)]="pregunta.respuesta"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Tema</ion-label>
+    <ion-input [(ngModel)]="pregunta.tema"></ion-input>
+  </ion-item>
+
+
+  <!-- BOTONES -->
+  <ion-grid class="ion-margin-top">
+    <ion-row>
+      <ion-col size="6">
+        <ion-button expand="block" color="success" (click)="crear()">
+          Crear
+        </ion-button>
+      </ion-col>
+
+      <ion-col size="6">
+        <ion-button expand="block" color="warning" (click)="actualizar()">
+          Actualizar
+        </ion-button>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-margin-top">
+      <ion-col size="6">
+        <ion-button expand="block" color="danger" (click)="eliminar()">
+          Eliminar
+        </ion-button>
+      </ion-col>
+
+      <ion-col size="6">
+        <ion-button expand="block" color="medium" (click)="limpiar()">
+          Limpiar
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <hr class="ion-margin" />
+
+  <!-- LISTADO -->
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Preguntas</ion-label>
+    </ion-list-header>
+
+    <ion-item 
+      *ngFor="let item of preguntas"
+      (click)="seleccionar(item)"
+      [class.selected]="preguntaSeleccionada?.id_pregunta === item.id_pregunta">
+
+      <ion-label>
+        <h2>{{ item.enunciado }}</h2>
+        <p>Test ID: {{ item.id_test }}</p>
+      </ion-label>
+
+    </ion-item>
+  </ion-list>
+
+</ion-content>

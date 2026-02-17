@@ -18,7 +18,15 @@ const routes: Routes = [
   {
     path: 'hacer-test/:id',
     loadChildren: () => import('./hacer-test/hacer-test.module').then( m => m.HacerTestPageModule)
+  },  {
+    path: 'admin-users',
+    loadChildren: () => import('./admin-users/admin-users.module').then( m => m.AdminUsersPageModule)
   },
+  {
+    path: 'admin-tests',
+    loadChildren: () => import('./admin-tests/admin-tests.module').then( m => m.AdminTestsPageModule)
+  },
+
 
 ];
 

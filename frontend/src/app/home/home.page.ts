@@ -15,4 +15,15 @@ export class HomePage {
 		this.router.navigateByUrl("/tests");
 	}
 
+	goToUsersAdmin(){
+		this.router.navigateByUrl("/admin-users");
+	}
+
+	goToTestsAdmin(){
+		this.router.navigateByUrl("/admin-tests");
+	}
+
+	logout(){
+		this.router.navigateByUrl("/login");
+	}
 }

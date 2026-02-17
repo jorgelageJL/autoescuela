@@ -39,7 +39,7 @@ getClase(pregunta: any, opcion: string): string {
 }
 finalizarTest() {
 
-  // Verificar que todas estén respondidas
+  // Verifica que todas estén respondidas
   const sinResponder = this.preguntas.some((p: any) => !p.respondida);
   if (sinResponder) {
     alert('Debes responder todas las preguntas');

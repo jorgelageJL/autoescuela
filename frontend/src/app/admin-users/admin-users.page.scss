@@ -1,0 +1,27 @@
+ion-content {
+  --background: #f4f6f9;
+}
+
+ion-item {
+  margin-bottom: 10px;
+  --border-radius: 8px;
+}
+
+ion-button {
+  --border-radius: 10px;
+  font-weight: 600;
+}
+
+ion-list {
+  margin-top: 15px;
+}
+
+ion-segment {
+  margin-bottom: 15px;
+}
+ion-item.selected {
+  --background: #e0f2ff;
+  border-left: 5px solid var(--ion-color-primary);
+  transform: scale(1.01);
+  transition: all 0.2s ease-in-out;
+}
