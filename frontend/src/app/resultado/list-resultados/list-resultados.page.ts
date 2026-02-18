@@ -1,25 +1,25 @@
 import { Component } from '@angular/core';
-import { PreguntaService } from 'src/app/services/pregunta-service';
+import { ResultadoService } from 'src/app/services/resultado-service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-list-preguntas',
-  templateUrl: './list-preguntas.page.html',
-  styleUrls: ['./list-preguntas.page.scss'],
+  selector: 'app-list-resultado',
+  templateUrl: './list-resultados.page.html',
+  styleUrls: ['./list-resultados.page.scss'],
   standalone: false /* AÑADIR AL FINAL DE CADA COMPONENTE */
 })
-export class ListPreguntasPage {
-  preguntas: any = [];
+export class ListResultadosPage {
+  resultados: any = [];
 
   constructor(
-    private preguntaService: PreguntaService,
+    private resultadoService: ResultadoService,
     private router: Router,
   ) {
     this.ionViewWillEnter();
   }
 
   async getAll() {
-    this.preguntas = await this.preguntaService.getAllPreguntas();
+    this.resultados = await this.resultadoService.getAllResultados();
   }
 
   ionViewWillEnter() {
@@ -28,14 +28,14 @@ export class ListPreguntasPage {
     this.getAll();
   }
 
-  update(pregunta: any) {
-    this.router.navigate(['add-pregunta'], {
-      state: { pregunta }
-    });
+  update(test: any) {
+    // this.router.navigate(['add-test'], {
+    //   state: { test }
+    // });
   }
 
-  async delete(id: string) {
-    // await this.preguntaService.deletePregunta(id);
+  async delete(id_test: string, id_alumno: string) {
+    // await this.resultadoService.deleteResultado(id_test, id_alumno);
     // this.getAll();
   }
 
@@ -45,10 +45,6 @@ export class ListPreguntasPage {
 
   goToHome() {
     this.router.navigateByUrl("home");
-  }
-
-  goToAddPregunta() {
-    this.router.navigateByUrl("add-pregunta");
   }
 
   goToAlumnos() {

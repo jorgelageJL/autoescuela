@@ -1,0 +1,108 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Realizar Test</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-button type="submit" color="warning" (click)="logout()">
+    LOGOUT
+  </ion-button>
+
+  <ion-button type="submit" color="warning" (click)="goToHome()">
+    HOME
+  </ion-button>
+
+  <ion-button type="submit" color="warning" (click)="goToTests()">
+    TESTS
+  </ion-button>
+
+  <ion-button type="submit" color="warning" (click)="goToAlumnos()">
+    ALUMNOS
+  </ion-button>
+
+  <ion-button type="submit" color="warning" (click)="goToProfesors()">
+    PROFESORES
+  </ion-button>
+
+  <ion-card color="secondary">
+    <ion-card-header>
+      <ion-item color="secondary" lines="none">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-card-title>ID</ion-card-title>
+            </ion-col>
+            <ion-col>
+              <ion-card-title>ENUNCIADO</ion-card-title>
+            </ion-col>
+            <ion-col>
+              <ion-card-title>A</ion-card-title>
+            </ion-col>
+            <ion-col>
+              <ion-card-title>B</ion-card-title>
+            </ion-col>
+            <ion-col>
+              <ion-card-title>C</ion-card-title>
+            </ion-col>
+            <ion-col>
+              <ion-card-title>RESPUESTA</ion-card-title>
+            </ion-col>
+            <ion-col>
+              <ion-card-title>TEMA</ion-card-title>
+            </ion-col>
+            <ion-col>
+              <ion-card-title>TEST</ion-card-title>
+            </ion-col>
+            <ion-col>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list [inset]="true">
+        <ion-item *ngFor="let it of preguntas" color="light">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-label>{{it.id_pregunta}}</ion-label>
+              </ion-col>
+              <ion-col>
+                <ion-label>{{it.enunciado}}</ion-label>
+              </ion-col>
+              <ion-col>
+                <ion-label>{{it.opcion_a}}</ion-label>
+              </ion-col>
+              <ion-col>
+                <ion-label>{{it.opcion_b}}</ion-label>
+              </ion-col>
+              <ion-col>
+                <ion-label>{{it.opcion_c}}</ion-label>
+              </ion-col>
+              <ion-col>
+                <ion-label>{{it.respuesta}}</ion-label>
+              </ion-col>
+              <ion-col>
+                <ion-label>{{it.tema}}</ion-label>
+              </ion-col>
+              <ion-col>
+                <ion-label>{{it.id_test}}</ion-label>
+              </ion-col>
+
+              <!-- <ion-button fill="clear" (click)="update(it)">
+                <ion-icon name="create-outline"></ion-icon>
+                Editar
+              </ion-button>
+              <ion-button color="danger" fill="clear" (click)="delete(it.id_pregunta)">
+                <ion-icon name="trash-outline"></ion-icon>
+                Borrar
+              </ion-button> -->
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

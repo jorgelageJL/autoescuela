@@ -39,6 +39,12 @@ export class ListTestsPage {
     // this.getAll();
   }
 
+  async test(id_test: string) {
+    this.router.navigate(['realizar-test'], {
+      state: { id_test }
+    });
+  }
+
   logout() {
     // this.authService.logout()
   }

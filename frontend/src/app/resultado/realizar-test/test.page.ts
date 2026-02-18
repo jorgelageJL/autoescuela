@@ -3,12 +3,13 @@ import { PreguntaService } from 'src/app/services/pregunta-service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-list-preguntas',
-  templateUrl: './list-preguntas.page.html',
-  styleUrls: ['./list-preguntas.page.scss'],
+  selector: 'app-test',
+  templateUrl: './test.page.html',
+  styleUrls: ['./test.page.scss'],
   standalone: false /* AÑADIR AL FINAL DE CADA COMPONENTE */
 })
-export class ListPreguntasPage {
+export class TestPage {
+  id_test: any;
   preguntas: any = [];
 
   constructor(
@@ -18,25 +19,18 @@ export class ListPreguntasPage {
     this.ionViewWillEnter();
   }
 
-  async getAll() {
-    this.preguntas = await this.preguntaService.getAllPreguntas();
+  async getAllPreguntasDelTest(id_test: string) {
+    this.preguntas = await this.preguntaService.getAllPreguntasDelTest(id_test);
   }
 
   ionViewWillEnter() {
     // Mover foco a body, evitando elementos de la página anterior
     (document.activeElement as HTMLElement)?.blur();
-    this.getAll();
-  }
-
-  update(pregunta: any) {
-    this.router.navigate(['add-pregunta'], {
-      state: { pregunta }
-    });
-  }
-
-  async delete(id: string) {
-    // await this.preguntaService.deletePregunta(id);
-    // this.getAll();
+    this.id_test = history.state.id_test;
+    this.getAllPreguntasDelTest(this.id_test);
+    // if (this.id_test) {
+    //   this.preguntaForm.patchValue(this.pregunta);
+    // }
   }
 
   logout() {
@@ -47,8 +41,8 @@ export class ListPreguntasPage {
     this.router.navigateByUrl("home");
   }
 
-  goToAddPregunta() {
-    this.router.navigateByUrl("add-pregunta");
+  goToTests() {
+    this.router.navigateByUrl("list-tests");
   }
 
   goToAlumnos() {

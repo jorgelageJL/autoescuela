@@ -18,6 +18,12 @@ export class PreguntaService {
     );
   }
 
+  async getAllPreguntasDelTest(id_test: string) {
+    return firstValueFrom(
+      this.httpClient.get(`${this.endPoint}/id_test/${id_test}`)
+    );
+  }
+
   async deletePregunta(id: string) {
     return firstValueFrom(
       this.httpClient.delete(`${this.endPoint}/${id}`)
