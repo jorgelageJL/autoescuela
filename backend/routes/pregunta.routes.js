@@ -8,9 +8,12 @@ module.exports = app => {
 
   // Retrieve all Preguntas
   router.get("/", /*auth.isAuthenticated,*/ Pregunta.findAll);
-
+  
   // Retrieve a single Pregunta by id
   router.get("/:id", /*auth.isAuthenticated,*/ Pregunta.findOne);
+  
+    // Retrieve all Preguntas by Test
+    router.get("/id_test/:id", /*auth.isAuthenticated,*/ Pregunta.findAllByTest);
 
   // // Retrieve a single Pregunta by enunciado
   // router.get("/dni_email/:field", /*auth.isAuthenticated,*/ Pregunta.findByDniOrEmail);

@@ -1,25 +1,25 @@
 import { Component } from '@angular/core';
-import { TestService } from 'src/app/services/test-service';
+import { PreguntaService } from 'src/app/services/pregunta-service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-list-tests',
-  templateUrl: './list-tests.page.html',
-  styleUrls: ['./list-tests.page.scss'],
+  selector: 'app-list-preguntas',
+  templateUrl: './list-preguntas.page.html',
+  styleUrls: ['./list-preguntas.page.scss'],
   standalone: false /* AÑADIR AL FINAL DE CADA COMPONENTE */
 })
-export class ListTestsPage {
-  tests: any = [];
+export class ListPreguntasPage {
+preguntas: any = [];
 
   constructor(
-    private testService: TestService,
+    private preguntaService: PreguntaService,
     private router: Router,
   ) {
     this.ionViewWillEnter();
   }
 
   async getAll() {
-    this.tests = await this.testService.getAllTests();
+    this.preguntas = await this.preguntaService.getAllPreguntas();
   }
 
   ionViewWillEnter() {
@@ -28,14 +28,14 @@ export class ListTestsPage {
     this.getAll();
   }
 
-  update(test: any) {
-    this.router.navigate(['add-test'], {
-      state: { test }
+  update(pregunta: any) {
+    this.router.navigate(['add-pregunta'], {
+      state: { pregunta }
     });
   }
 
   async delete(id: string) {
-    // await this.testService.deleteTest(id);
+    // await this.preguntaService.deletePregunta(id);
     // this.getAll();
   }
 
@@ -47,8 +47,8 @@ export class ListTestsPage {
     this.router.navigateByUrl("home");
   }
 
-  goToAddTest() {
-    this.router.navigateByUrl("add-test");
+  goToAddPregunta() {
+    this.router.navigateByUrl("add-pregunta");
   }
 
   goToAlumnos() {

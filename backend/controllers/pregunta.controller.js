@@ -101,17 +101,17 @@ exports.findOne = (req, res) => {
     });
 };
 
-// Find a Pregunta by enunciado
-exports.findByName = (req, res) => {
+// Find a Pregunta by Test
+exports.findAllByTest = (req, res) => {
   // Validate request
-  if (!req.body.enunciado) {
-    res.status(400).send({
-      message: "Content can not be empty!"
-    });
-    return;
-  }
+  // if (!req.body.id_test) {
+  //   res.status(400).send({
+  //     message: "Content can not be empty!"
+  //   });
+  //   return;
+  // }
 
-  Pregunta.findOne({ where: { enunciado: req.body.enunciado } })
+  Pregunta.findAll({ where: { id_test: req.params.id } })
     .then(data => {
       res.send(data);
     })

@@ -4,7 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+    redirectTo: 'list-preguntas',
   },
   {
     path: 'list-alumnos',
@@ -31,17 +31,25 @@ const routes: Routes = [
     loadChildren: () => import('./users/administrador/add-administrador/add-administrador.module').then( m => m.AddAdministradorPageModule)
   },
   {
-    path: '',
-    redirectTo: 'list-alumnos',
-    pathMatch: 'full'
-  },
-  {
     path: 'list-tests',
     loadChildren: () => import('./test/list-tests/list-tests.module').then( m => m.ListTestsPageModule)
   },
   {
     path: 'add-test',
     loadChildren: () => import('./test/add-test/add-test.module').then( m => m.AddTestPageModule)
+  },
+  {
+    path: 'list-preguntas',
+    loadChildren: () => import('./pregunta/list-preguntas/list-preguntas.module').then( m => m.ListPreguntasPageModule)
+  },
+  {
+    path: 'add-pregunta',
+    loadChildren: () => import('./pregunta/add-pregunta/add-pregunta.module').then( m => m.AddPreguntaPageModule)
+  },
+  {
+    path: '',
+    redirectTo: 'list-preguntas',
+    pathMatch: 'full'
   },
 ];
 

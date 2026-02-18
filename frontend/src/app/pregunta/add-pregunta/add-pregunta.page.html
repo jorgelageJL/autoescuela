@@ -1,0 +1,107 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Add Pregunta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-button type="submit" color="warning" (click)="logout()">
+    LOGOUT
+  </ion-button>
+
+  <ion-button type="submit" color="warning" (click)="goToHome()">
+    HOME
+  </ion-button>
+
+  <ion-button type="submit" color="warning" (click)="goToPreguntas()">
+    PREGUNTAS
+  </ion-button>
+  
+  <form [formGroup]="preguntaForm">
+    <!-- <ion-grid>
+      <ion-row class="ion-align-items-center">
+        <ion-col size="6">
+          <ion-img class="photo-frame" name="filename" required
+            [src]="capturedPhoto ? capturedPhoto : '../../assets/No-Image-Placeholder.svg'" (click)="takePhoto()">
+          </ion-img>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button color="primary" fill="outline" (click)="takePhoto()">
+            <ion-icon slot="start" name="camera-outline"></ion-icon>
+            Take a photo
+          </ion-button>
+          <ion-button color="primary" fill="outline" (click)="pickImage()">
+            <ion-icon slot="start" name="image-outline"></ion-icon>
+            Pick an image
+          </ion-button>
+          <ion-button color="danger" fill="outline" (click)="discardImage()">
+            <ion-icon slot="start" name="aperture"></ion-icon>
+            Discard image
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid> -->
+
+    <ion-item lines="full">
+      <ion-input type="number" name="id_pregunta" formControlName="id_pregunta" label="ID" label-placement="floating" readonly></ion-input>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-input type="text" name="enunciado" formControlName="enunciado" label="Enunciado" label-placement="floating" placeholder="Enter text" required></ion-input>
+      <ion-text *ngIf="preguntaForm.get('enunciado')?.touched && preguntaForm.get('enunciado')?.hasError('required')">
+        obligatorio
+      </ion-text>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-input type="text" name="opcion_a" formControlName="opcion_a" label="A" label-placement="floating" placeholder="Enter text" required></ion-input>
+      <ion-text *ngIf="preguntaForm.get('opcion_a')?.touched && preguntaForm.get('opcion_a')?.hasError('required')">
+        obligatorio
+      </ion-text>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-input type="text" name="opcion_b" formControlName="opcion_b" label="B" label-placement="floating" placeholder="Enter text" required></ion-input>
+      <ion-text *ngIf="preguntaForm.get('opcion_b')?.touched && preguntaForm.get('opcion_b')?.hasError('required')">
+        obligatorio
+      </ion-text>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-input type="text" name="opcion_c" formControlName="opcion_c" label="C" label-placement="floating" placeholder="Enter text" required></ion-input>
+      <ion-text *ngIf="preguntaForm.get('opcion_c')?.touched && preguntaForm.get('opcion_c')?.hasError('required')">
+        obligatorio
+      </ion-text>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-input type="text" name="respuesta" formControlName="respuesta" label="Respuesta" label-placement="floating" placeholder="Enter text" required></ion-input>
+      <ion-text *ngIf="preguntaForm.get('respuesta')?.touched && preguntaForm.get('respuesta')?.hasError('required')">
+        obligatorio
+      </ion-text>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-input type="text" name="tema" formControlName="tema" label="Tema" label-placement="floating" placeholder="Enter text" required></ion-input>
+      <ion-text *ngIf="preguntaForm.get('tema')?.touched && preguntaForm.get('tema')?.hasError('required')">
+        obligatorio
+      </ion-text>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-input type="number" name="id_test" formControlName="id_test" label="id_test" label-placement="floating" placeholder="Enter text" required></ion-input>
+      <ion-text *ngIf="preguntaForm.get('id_test')?.touched && preguntaForm.get('id_test')?.hasError('required')">
+        obligatorio
+      </ion-text>
+    </ion-item>
+    
+    <ion-row>
+      <ion-col>
+        <ion-button type="submit" [disabled]="preguntaForm.invalid" (click)="create()" color="primary" expand="block">AÑADIR</ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>
