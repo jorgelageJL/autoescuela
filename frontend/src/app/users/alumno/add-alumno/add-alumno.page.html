@@ -1,0 +1,100 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Add Alumno</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-button type="submit" color="warning" (click)="logout()">
+    LOGOUT
+  </ion-button>
+
+  <ion-button type="submit" color="warning" (click)="goToHome()">
+    HOME
+  </ion-button>
+
+  <ion-button type="submit" color="warning" (click)="goToAlumnos()">
+    ALUMNOS
+  </ion-button>
+  
+  <form [formGroup]="usuarioForm">
+    <!-- <ion-grid>
+      <ion-row class="ion-align-items-center">
+        <ion-col size="6">
+          <ion-img class="photo-frame" name="filename" required
+            [src]="capturedPhoto ? capturedPhoto : '../../assets/No-Image-Placeholder.svg'" (click)="takePhoto()">
+          </ion-img>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button color="primary" fill="outline" (click)="takePhoto()">
+            <ion-icon slot="start" name="camera-outline"></ion-icon>
+            Take a photo
+          </ion-button>
+          <ion-button color="primary" fill="outline" (click)="pickImage()">
+            <ion-icon slot="start" name="image-outline"></ion-icon>
+            Pick an image
+          </ion-button>
+          <ion-button color="danger" fill="outline" (click)="discardImage()">
+            <ion-icon slot="start" name="aperture"></ion-icon>
+            Discard image
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid> -->
+
+    <ion-item lines="full">
+      <ion-input type="text" name="id_alumno" formControlName="id_alumno" label="ID" label-placement="floating" readonly></ion-input>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-input type="text" name="nombre" formControlName="nombre" label="Nombre" label-placement="floating" placeholder="Enter text" required></ion-input>
+      <ion-text *ngIf="usuarioForm.get('nombre')?.touched && usuarioForm.get('nombre')?.hasError('required')">
+        obligatorio
+      </ion-text>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-input type="text" name="apellidos" formControlName="apellidos" label="Apellidos" label-placement="floating" placeholder="Enter text" required></ion-input>
+      <ion-text *ngIf="usuarioForm.get('apellidos')?.touched && usuarioForm.get('apellidos')?.hasError('required')">
+        obligatorio
+      </ion-text>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-input type="text" name="dni" formControlName="dni" label="DNI" label-placement="floating" placeholder="Enter text" required></ion-input>
+      <ion-text *ngIf="usuarioForm.get('dni')?.touched && usuarioForm.get('dni')?.hasError('required')">
+        obligatorio
+      </ion-text>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-input type="text" name="email" formControlName="email" label="Email" label-placement="floating" placeholder="Enter text" required></ion-input>
+      <ion-text *ngIf="usuarioForm.get('email')?.touched && usuarioForm.get('email')?.hasError('required')">
+        obligatorio
+      </ion-text>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-input type="password" name="password" formControlName="password" label="Password" label-placement="floating" placeholder="Enter text" required></ion-input>
+      <ion-text *ngIf="usuarioForm.get('password')?.touched && usuarioForm.get('password')?.hasError('required')">
+        obligatorio
+      </ion-text>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-input type="number" name="id_profesor" formControlName="id_profesor" label="id_profesor" label-placement="floating" placeholder="Enter text" required></ion-input>
+      <ion-text *ngIf="usuarioForm.get('id_profesor')?.touched && usuarioForm.get('id_profesor')?.hasError('required')">
+        obligatorio
+      </ion-text>
+    </ion-item>
+    
+    <ion-row>
+      <ion-col>
+        <ion-button type="submit" [disabled]="usuarioForm.invalid" (click)="create()" color="primary" expand="block">AÑADIR</ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>

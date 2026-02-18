@@ -1,0 +1,110 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Alumnos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-button type="submit" color="warning" (click)="logout()">
+    LOGOUT
+  </ion-button>
+
+  <ion-button type="submit" color="warning" (click)="goToHome()">
+    HOME
+  </ion-button>
+
+  <ion-button type="submit" color="warning" (click)="goToAddAlumno()">
+    ADD ALUMNO
+  </ion-button>
+
+  <ion-button type="submit" color="warning" (click)="goToProfesors()">
+    PROFESORES
+  </ion-button>
+
+  <ion-button type="submit" color="warning" (click)="goToAdministradors()">
+    ADMINISTRADORES
+  </ion-button>
+
+  <ion-card color="secondary">
+    <ion-card-header>
+      <ion-item color="secondary" lines="none">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-card-title>ID</ion-card-title>
+            </ion-col>
+            <ion-col>
+              <ion-card-title>NOMBRE</ion-card-title>
+            </ion-col>
+            <ion-col>
+              <ion-card-title>APELLIDOS</ion-card-title>
+            </ion-col>
+            <ion-col>
+              <ion-card-title>DNI</ion-card-title>
+            </ion-col>
+            <ion-col>
+              <ion-card-title>EMAIL</ion-card-title>
+            </ion-col>
+            <ion-col>
+              <ion-card-title>PASSWORD</ion-card-title>
+            </ion-col>
+            <ion-col>
+              <ion-card-title>FECHA ALTA</ion-card-title>
+            </ion-col>
+            <ion-col>
+              <ion-card-title>PROFESOR</ion-card-title>
+            </ion-col>
+            <ion-col>
+            </ion-col>
+            <ion-col>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list [inset]="true">
+        <ion-item *ngFor="let it of usuarios" color="light">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-label>{{it.id_alumno}}</ion-label>
+              </ion-col>
+              <ion-col>
+                <ion-label>{{it.nombre}}</ion-label>
+              </ion-col>
+              <ion-col>
+                <ion-label>{{it.apellidos}}</ion-label>
+              </ion-col>
+              <ion-col>
+                <ion-label>{{it.dni}}</ion-label>
+              </ion-col>
+              <ion-col>
+                <ion-label>{{it.email}}</ion-label>
+              </ion-col>
+              <ion-col>
+                <ion-label>{{it.password}}</ion-label>
+              </ion-col>
+              <ion-col>
+                <ion-label>{{it.fecha_alta}}</ion-label>
+              </ion-col>
+              <ion-col>
+                <ion-label>{{it.id_profesor}}</ion-label>
+              </ion-col>
+
+              <ion-button fill="clear" (click)="update(it)">
+                <ion-icon name="create-outline"></ion-icon>
+                Editar
+              </ion-button>
+              <ion-button color="danger" fill="clear" (click)="delete(it.id_alumno)">
+                <ion-icon name="trash-outline"></ion-icon>
+                Borrar
+              </ion-button>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
