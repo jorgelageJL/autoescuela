@@ -16,7 +16,7 @@ const routes: Routes = [
   },
   {
     path: 'list-profesors',
-    loadChildren: () => import('./users/profesor/list-profesor/list-profesor.module').then( m => m.ListProfesorPageModule)
+    loadChildren: () => import('./users/profesor/list-profesors/list-profesors.module').then( m => m.ListProfesorPageModule)
   },
   {
     path: 'add-profesor',
@@ -24,7 +24,7 @@ const routes: Routes = [
   },
   {
     path: 'list-administradors',
-    loadChildren: () => import('./users/administrador/list-administrador/list-administrador.module').then( m => m.ListAdministradorPageModule)
+    loadChildren: () => import('./users/administrador/list-administradors/list-administradors.module').then( m => m.ListAdministradorPageModule)
   },
   {
     path: 'add-administrador',
@@ -34,6 +34,14 @@ const routes: Routes = [
     path: '',
     redirectTo: 'list-alumnos',
     pathMatch: 'full'
+  },
+  {
+    path: 'list-tests',
+    loadChildren: () => import('./test/list-tests/list-tests.module').then( m => m.ListTestsPageModule)
+  },
+  {
+    path: 'add-test',
+    loadChildren: () => import('./test/add-test/add-test.module').then( m => m.AddTestPageModule)
   },
 ];
 

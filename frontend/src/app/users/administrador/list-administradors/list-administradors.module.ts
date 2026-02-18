@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';/* AÑADIR A CADA MODULO */
 import { IonicModule } from '@ionic/angular';
-import { ListProfesorPageRoutingModule } from './list-profesor-routing.module';
-import { ListProfesorPage } from './list-profesor.page';
+import { ListAdministradorsPageRoutingModule } from './list-administradors-routing.module';
+import { ListAdministradorsPage } from './list-administradors.page';
 
 @NgModule({
   imports: [
@@ -11,8 +11,8 @@ import { ListProfesorPage } from './list-profesor.page';
     FormsModule,
     ReactiveFormsModule,/* AÑADIR A CADA MODULO */
     IonicModule,
-    ListProfesorPageRoutingModule
+    ListAdministradorsPageRoutingModule
   ],
-  declarations: [ListProfesorPage]
+  declarations: [ListAdministradorsPage]
 })
-export class ListProfesorPageModule {}
+export class ListAdministradorPageModule {}

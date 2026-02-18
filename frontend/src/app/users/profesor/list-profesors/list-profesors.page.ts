@@ -3,12 +3,12 @@ import { UsuarioService } from 'src/app/services/usuario-service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-list-administrador',
-  templateUrl: './list-administrador.page.html',
-  styleUrls: ['./list-administrador.page.scss'],
+  selector: 'app-list-profesors',
+  templateUrl: './list-profesors.page.html',
+  styleUrls: ['./list-profesors.page.scss'],
   standalone: false /* AÑADIR AL FINAL DE CADA COMPONENTE */
 })
-export class ListAdministradorPage {
+export class ListProfesorsPage {
   usuarios: any = [];
 
   constructor(
@@ -19,7 +19,7 @@ export class ListAdministradorPage {
   }
 
   async getAll() {
-    this.usuarios = await this.usuarioService.getAllAdministradors();
+    this.usuarios = await this.usuarioService.getAllProfesors();
   }
 
   ionViewWillEnter() {
@@ -29,13 +29,13 @@ export class ListAdministradorPage {
   }
 
   update(usuario: any) {
-    this.router.navigate(['add-administrador'], {
+    this.router.navigate(['add-profesor'], {
       state: { usuario }
     });
   }
 
   async delete(id: string) {
-    // await this.usuarioService.deleteAdministrador(id);
+    // await this.usuarioService.deleteProfesor(id);
     // this.getAll();
   }
 
@@ -47,16 +47,16 @@ export class ListAdministradorPage {
     this.router.navigateByUrl("home");
   }
 
-  goToAddAdministrador() {
-    this.router.navigateByUrl("add-administrador");
+  goToAddProfesor() {
+    this.router.navigateByUrl("add-profesor");
   }
 
   goToAlumnos() {
     this.router.navigateByUrl("list-alumnos");
   }
 
-  goToProfesors() {
-    this.router.navigateByUrl("list-profesors");
+  goToAdministradors() {
+    this.router.navigateByUrl("list-administradors");
   }
 
 }

@@ -19,15 +19,22 @@ node, MySQL, git
 
 ### Instalación 🔧
 
-_Una serie de ejemplos paso a paso que te dicen lo que debes hacer para clonarte el repositorio del proyecto y tenerlo en ejecución. Usamos git bash como terminal de comándos para desarrollar el proyecto_
-
-_BACKEND_
+_Una serie de ejemplos paso a paso que te dicen lo que debes hacer para tener el proyecto en ejecución. Usamos git bash como terminal de comándos para desarrollarlo.
+Lo primero es configurar tu perfil de GitHub para vincularlo con tu cuenta online:_
 
 ```
 git config --global user.email "...@gmail.com"
 git config --global user.name "tuNombreDeUsuario"
+```
+
+_Luego clonarte el repositorio de este proyecto:_
+
+```
 git clone git@github.com:jorgelageJL/autoescuela.git
 ```
+
+
+**BACKEND**
 
 _Ahora verás la carpeta del proyecto 'autoescuela' clonada y dentro dos subcarpetas principales(.git no cuenta al tratarse de la propia herramienta para el control de versiones del proyecto), una con el backend y otra con el frontend. Entras al backend primero con el comando:_
 
@@ -47,14 +54,25 @@ _Al principio tardará un poco ya que npm está creando la carpeta 'node_modules
 node index.js
 ```
 
-_FRONTEND_
+**FRONTEND**
+
+_Ahora sales del 'backend' y entras al 'frontend' con el comando:_
 
 ```
-cd frontend
-npm init
+cd ../frontend
+```
+
+_e instalas 'IONIC' como paquete de npm :_
+
+```
+npm install -g @ionic/cli
+```
+
+_Finalmente ejecutas el servidor 'frontend' de IONIC con el comando:_
+
+```
 ionic serve
 ```
-
 
 ### Documentación de apoyo ⌨️
 
