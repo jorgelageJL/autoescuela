@@ -25,84 +25,25 @@
     PROFESORES
   </ion-button>
 
-  <ion-card color="secondary">
-    <ion-card-header>
-      <ion-item color="secondary" lines="none">
-        <ion-grid>
-          <ion-row>
-            <ion-col>
-              <ion-card-title>ID</ion-card-title>
-            </ion-col>
-            <ion-col>
-              <ion-card-title>ENUNCIADO</ion-card-title>
-            </ion-col>
-            <ion-col>
-              <ion-card-title>A</ion-card-title>
-            </ion-col>
-            <ion-col>
-              <ion-card-title>B</ion-card-title>
-            </ion-col>
-            <ion-col>
-              <ion-card-title>C</ion-card-title>
-            </ion-col>
-            <ion-col>
-              <ion-card-title>RESPUESTA</ion-card-title>
-            </ion-col>
-            <ion-col>
-              <ion-card-title>TEMA</ion-card-title>
-            </ion-col>
-            <ion-col>
-              <ion-card-title>TEST</ion-card-title>
-            </ion-col>
-            <ion-col>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-item>
-    </ion-card-header>
+  <form *ngIf="testForm" [formGroup]="testForm" (ngSubmit)="create()">
+    <div class="pregunta-card" *ngFor="let pregunta of preguntas">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>{{ pregunta.enunciado }}</ion-card-title>
+        </ion-card-header>
 
-    <ion-card-content>
-      <ion-list [inset]="true">
-        <ion-item *ngFor="let it of preguntas" color="light">
-          <ion-grid>
-            <ion-row>
-              <ion-col>
-                <ion-label>{{it.id_pregunta}}</ion-label>
-              </ion-col>
-              <ion-col>
-                <ion-label>{{it.enunciado}}</ion-label>
-              </ion-col>
-              <ion-col>
-                <ion-label>{{it.opcion_a}}</ion-label>
-              </ion-col>
-              <ion-col>
-                <ion-label>{{it.opcion_b}}</ion-label>
-              </ion-col>
-              <ion-col>
-                <ion-label>{{it.opcion_c}}</ion-label>
-              </ion-col>
-              <ion-col>
-                <ion-label>{{it.respuesta}}</ion-label>
-              </ion-col>
-              <ion-col>
-                <ion-label>{{it.tema}}</ion-label>
-              </ion-col>
-              <ion-col>
-                <ion-label>{{it.id_test}}</ion-label>
-              </ion-col>
+        <ion-card-content>
+          <ion-radio-group [formControlName]="pregunta.id_pregunta">
+            <ion-item *ngFor="let opcion of pregunta.opciones" lines="none" class="opcion">
+              <ion-radio slot="start" [value]="opcion"></ion-radio>
+              <ion-label>{{ opcion }}</ion-label>
+            </ion-item>
+          </ion-radio-group>
+        </ion-card-content>
+      </ion-card>
+    </div>
 
-              <!-- <ion-button fill="clear" (click)="update(it)">
-                <ion-icon name="create-outline"></ion-icon>
-                Editar
-              </ion-button>
-              <ion-button color="danger" fill="clear" (click)="delete(it.id_pregunta)">
-                <ion-icon name="trash-outline"></ion-icon>
-                Borrar
-              </ion-button> -->
-            </ion-row>
-          </ion-grid>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
+    <br />
+    <ion-button type="submit" [disabled]="testForm.invalid" color="primary" expand="block">ENVIAR</ion-button>
+  </form>
 </ion-content>

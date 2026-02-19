@@ -18,9 +18,9 @@ export class PreguntaService {
     );
   }
 
-  async getAllPreguntasDelTest(id_test: string) {
-    return firstValueFrom(
-      this.httpClient.get(`${this.endPoint}/id_test/${id_test}`)
+  async getAllPreguntasDelTest(id_test: string): Promise<any[]> {
+    return await firstValueFrom(
+      this.httpClient.get<any[]>(`${this.endPoint}/id_test/${id_test}`)
     );
   }
 
