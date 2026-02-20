@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { PreguntaService } from 'src/app/services/pregunta-service';
+import { ResultadoService } from 'src/app/services/resultado-service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -13,25 +14,15 @@ export class TestPage {
   id_test: any;
   preguntas: any[] = [];
   respuestas: any[] = [];
+  resultado = {};
   testForm!: FormGroup;
 
   constructor(
     private preguntaService: PreguntaService,
+    private resultadoService: ResultadoService,
     private router: Router,
     public formBuilder: FormBuilder,
   ) { }
-
-  crearFormulario() {
-    const group: any = {};
-    this.preguntas.forEach(pregunta => {
-      group[pregunta.id_pregunta] = ['', Validators.required];
-    });
-    this.testForm = this.formBuilder.group(group);
-  }
-
-  async getAllPreguntasDelTest(id_test: string): Promise<any[]> {
-    return await this.preguntaService.getAllPreguntasDelTest(id_test);
-  }
 
   mezclarOpciones() {
     this.preguntas = this.preguntas.map(pregunta => {
@@ -43,12 +34,20 @@ export class TestPage {
     });
   }
 
+  crearFormulario() {
+    const group: any = {};
+    this.preguntas.forEach(pregunta => {
+      group[pregunta.id_pregunta] = ['', Validators.required];
+    });
+    this.testForm = this.formBuilder.group(group);
+  }
+
   async ionViewWillEnter() {
     // Mover foco a body, evitando elementos de la página anterior
     (document.activeElement as HTMLElement)?.blur();
+    this.preguntas = history.state.preguntas;
     this.id_test = history.state.id_test;
-    if (this.id_test) {
-      this.preguntas = await this.getAllPreguntasDelTest(this.id_test);
+    if (this.preguntas) {
       this.mezclarOpciones();
       this.crearFormulario();
     }
@@ -69,8 +68,23 @@ export class TestPage {
       }
     });
 
-    console.log("Resultado:", correctas, "de", this.preguntas.length);
-    // this.router.navigateByUrl("list-tests");
+    // console.log("Resultado:", correctas, "de", this.preguntas.length);
+    alert(`Resultado: ${correctas} de ${this.preguntas.length}`)
+
+    this.resultado = {
+      id_test: this.id_test,
+      id_alumno: 13,
+      nota: correctas
+    };
+
+    console.log(this.resultado)
+
+    // try {
+    await this.resultadoService.createResultado(this.resultado);
+    // } catch (error) {
+    //   await this.resultadoService.updateResultado(this.resultado);
+    // }
+    this.router.navigateByUrl("list-resultados");
   }
 
   logout() {

@@ -34,9 +34,12 @@ export class ListPreguntasPage {
     });
   }
 
-  async delete(id: string) {
-    // await this.preguntaService.deletePregunta(id);
-    // this.getAll();
+  async delete(pregunta: any) {
+    const del = confirm(`¿Desea eliminar la Pregunta: '${pregunta.enunciado}' con id: ${pregunta.id_pregunta}?`)
+    if (del) {
+      await this.preguntaService.deletePregunta(pregunta.id_pregunta);
+      this.getAll();
+    }
   }
 
   logout() {

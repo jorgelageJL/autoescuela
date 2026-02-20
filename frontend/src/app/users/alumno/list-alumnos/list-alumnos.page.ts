@@ -34,9 +34,12 @@ export class ListAlumnosPage {
     });
   }
 
-  async delete(id: string) {
-    // await this.usuarioService.deleteAlumno(id);
-    // this.getAll();
+  async delete(usuario: any) {
+    const del = confirm(`¿Desea eliminar el Alumno: '${usuario.nombre} ${usuario.apellidos}' con id: ${usuario.id_alumno}?`)
+    if (del) {
+      await this.usuarioService.deleteAlumno(usuario.id_alumno);
+      this.getAll();
+    }
   }
 
   logout() {

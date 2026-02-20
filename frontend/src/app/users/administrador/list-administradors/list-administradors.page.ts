@@ -34,9 +34,12 @@ export class ListAdministradorsPage {
     });
   }
 
-  async delete(id: string) {
-    // await this.usuarioService.deleteAdministrador(id);
-    // this.getAll();
+  async delete(usuario: any) {
+    const del = confirm(`¿Desea eliminar el Administrador: '${usuario.nombre} ${usuario.apellidos}' con id: ${usuario.id_admin}?`)
+    if (del) {
+      await this.usuarioService.deleteAdministrador(usuario.id_admin);
+      this.getAll();
+    }
   }
 
   logout() {

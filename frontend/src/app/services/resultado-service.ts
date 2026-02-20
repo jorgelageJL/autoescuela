@@ -24,9 +24,9 @@ export class ResultadoService {
     );
   }
 
-  async createResultado(resultado: any) {
+  async createResultado(resultado: any): Promise<any> {
     return firstValueFrom(
-      this.httpClient.post(this.endPoint, resultado)
+      this.httpClient.post<any>(this.endPoint, resultado)
     );
   }
 

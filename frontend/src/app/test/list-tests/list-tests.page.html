@@ -57,7 +57,7 @@
                 <ion-label>{{it.nombre}}</ion-label>
               </ion-col>
 
-              <ion-button fill="clear" (click)="test(it.id_test)">
+              <ion-button fill="clear" (click)="goToTest(it.id_test)">
                 <ion-icon name="create-outline"></ion-icon>
                 Realizar Test
               </ion-button>
@@ -65,7 +65,7 @@
                 <ion-icon name="create-outline"></ion-icon>
                 Editar
               </ion-button>
-              <ion-button color="danger" fill="clear" (click)="delete(it.id_test)">
+              <ion-button color="danger" fill="clear" (click)="delete(it)">
                 <ion-icon name="trash-outline"></ion-icon>
                 Borrar
               </ion-button>

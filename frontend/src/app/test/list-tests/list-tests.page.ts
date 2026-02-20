@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { TestService } from 'src/app/services/test-service';
+import { PreguntaService } from 'src/app/services/pregunta-service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,6 +14,7 @@ export class ListTestsPage {
 
   constructor(
     private testService: TestService,
+    private preguntaService: PreguntaService,
     private router: Router,
   ) {
     this.ionViewWillEnter();
@@ -34,15 +36,23 @@ export class ListTestsPage {
     });
   }
 
-  async delete(id: string) {
-    // await this.testService.deleteTest(id);
-    // this.getAll();
+  async delete(test: any) {
+    const del = confirm(`¿Desea eliminar el Test: '${test.nombre}' con id: ${test.id_test}?`)
+    if (del) {
+      await this.testService.deleteTest(test.id_test);
+      this.getAll();
+    }
   }
 
-  async test(id_test: string) {
-    this.router.navigate(['realizar-test'], {
-      state: { id_test }
-    });
+  async goToTest(id_test: string) {
+    let preguntas = await this.preguntaService.getAllPreguntasDelTest(id_test);
+    if (preguntas.length > 0) {
+      this.router.navigate(['realizar-test'], {
+        state: { id_test, preguntas }
+      });
+    } else {
+      alert('Test vacío!!')
+    }
   }
 
   logout() {

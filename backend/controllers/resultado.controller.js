@@ -5,21 +5,13 @@ const Op = db.Sequelize.Op;
 // const  bcrypt  =  require('bcryptjs');
 
 // Create a new Resultado
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
   // Validate request
-  if (!req.body.id_test || !req.body.id_alumno || !req.body.nota) {
-    res.status(400).send({
+  if (!req.body.id_test || !req.body.id_alumno || req.body.nota < 0) {
+    return res.status(400).send({
       message: "Content can not be empty!"
     });
-    return;
   }
-
-  // Create a Resultado
-  const resultado = {
-    id_test: req.body.id_test,
-    id_alumno: req.body.id_alumno,
-    nota: req.body.nota
-  };
 
   // Resultado.findOne({ where: { dni: Resultado.dni } })
   //   .then(data => {
@@ -36,14 +28,14 @@ exports.create = (req, res) => {
   //     administrador.password = bcrypt.hashSync(req.body.password);
 
   // Save new Resultado in the database
-  Resultado.create(resultado)
+  await Resultado.create(req.body)
     .then(data => {
       // const token = utils.generateToken(data);
       // get basic user details
       // const userObj = utils.getCleanUser(data);
       // return the token along with user details
       // return res.json({ user: userObj, access_token: token });
-      res.send(data);
+      res.status(201).send(data);
     })
     .catch(err => {
       res.status(500).send({
@@ -129,16 +121,32 @@ exports.findOne = (req, res) => {
     });
 };
 
+exports.upsert = async (req, res) => {
+  try {
+    await Resultado.upsert(req.body);
+
+    res.send({
+      message: "Resultado created or updated successfully."
+    });
+
+  } catch (error) {
+    res.status(500).send({
+      message: "Error saving Resultado."
+    });
+  }
+};
+
 // Update Resultado by id
 exports.update = (req, res) => {
   const id_test = req.params.id_test;
   const id_alumno = req.params.id_alumno;
+  console.log(req.body)
 
   Resultado.update(req.body, {
     where: { id_test: id_test, id_alumno: id_alumno }
   })
-    .then(num => {
-      if (num == 1) {
+    .then(([num]) => {
+      if (num === 1) {
         res.send({
           message: "Resultado was updated successfully."
         });

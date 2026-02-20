@@ -4,7 +4,7 @@ module.exports = app => {
   const router = require("express").Router();
 
   // Create a new Resultado
-  router.post("/", Resultado.create);
+  router.post("/", Resultado.upsert);
 
   // Retrieve all Resultados
   router.get("/", /*auth.isAuthenticated,*/ Resultado.findAll);
@@ -12,8 +12,9 @@ module.exports = app => {
   // Retrieve a single Resultado by id
   router.get("/:id_test/:id_alumno", /*auth.isAuthenticated,*/ Resultado.findOne);
 
-  // Update Resultado by id
-  router.put("/:id_test/:id_alumno", /*auth.isAuthenticated,*/ Resultado.update);
+  // Update Resultado
+  // router.put("/:id_test/:id_alumno", /*auth.isAuthenticated,*/ Resultado.update);
+  router.put("/", Resultado.upsert);
 
   // Delete Resultado by id
   router.delete("/:id_test/:id_alumno", Resultado.delete);

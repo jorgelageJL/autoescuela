@@ -3,10 +3,6 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'home',
-    redirectTo: 'list-tests',
-  },
-  {
     path: 'list-alumnos',
     loadChildren: () => import('./users/alumno/list-alumnos/list-alumnos.module').then( m => m.ListAlumnosPageModule)
   },
@@ -53,6 +49,10 @@ const routes: Routes = [
   {
     path: 'realizar-test',
     loadChildren: () => import('./resultado/realizar-test/test.module').then( m => m.TestPageModule)
+  },
+  {
+    path: 'home',
+    redirectTo: 'list-tests',
   },
   {
     path: '',

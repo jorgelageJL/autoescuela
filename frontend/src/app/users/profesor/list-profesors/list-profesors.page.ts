@@ -34,9 +34,12 @@ export class ListProfesorsPage {
     });
   }
 
-  async delete(id: string) {
-    // await this.usuarioService.deleteProfesor(id);
-    // this.getAll();
+  async delete(usuario: any) {
+    const del = confirm(`¿Desea eliminar el Profesor: '${usuario.nombre} ${usuario.apellidos}' con id: ${usuario.id_profesor}?`)
+    if (del) {
+      await this.usuarioService.deleteProfesor(usuario.id_profesor);
+      this.getAll();
+    }
   }
 
   logout() {
