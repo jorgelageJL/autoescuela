@@ -35,6 +35,7 @@ $RECYCLE.BIN/
 /frontend/npm-debug.log
 /frontend/yarn-error.log
 /frontend/yarn.lock
+/backend/public
 
 # IDEs and editors
 /frontend/.idea/

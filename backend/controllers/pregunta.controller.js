@@ -2,17 +2,15 @@ const db = require("../models");
 const Pregunta = db.Pregunta;
 const Op = db.Sequelize.Op;
 // const utils = require("../utils.js");
-// const  bcrypt  =  require('bcryptjs');
 
 // Create a new Pregunta
 exports.create = (req, res) => {
   // Validate request
   if (!req.body.enunciado || !req.body.opcion_a || !req.body.opcion_b ||
     !req.body.opcion_c || !req.body.respuesta || !req.body.tema || !req.body.id_test) {
-    res.status(400).send({
+    return res.status(400).send({
       message: "Content can not be empty!"
     });
-    return;
   }
 
   // Create a Pregunta
@@ -23,6 +21,7 @@ exports.create = (req, res) => {
     opcion_c: req.body.opcion_c,
     respuesta: req.body.respuesta,
     tema: req.body.tema,
+    filename: req.file ? req.file.filename : "default.jpg",
     id_test: req.body.id_test
   };
 

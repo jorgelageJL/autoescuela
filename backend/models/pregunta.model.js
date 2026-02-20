@@ -32,6 +32,11 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: false,
     },
+    filename: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: 'default.jpg'
+    }
   }, {
     timestamps: false
   });

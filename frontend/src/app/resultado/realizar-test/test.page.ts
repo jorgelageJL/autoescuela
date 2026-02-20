@@ -73,7 +73,7 @@ export class TestPage {
 
     this.resultado = {
       id_test: this.id_test,
-      id_alumno: 13,
+      id_alumno: 1,
       nota: correctas
     };
 

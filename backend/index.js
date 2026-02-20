@@ -1,18 +1,35 @@
 const express = require("express");
 const cors = require("cors");
+const bodyParser = require('body-parser');
+const path = require('path');
 const app = express();
 
 let corsOptions = {
-  origin: 'http://localhost:8100',
+  origin: '*',
+  // origin: 'http://localhost:8100',
   // credentials: true,
   // allowedHeaders: ['Content-Type', 'Authorization'],
   // methods: ['GET', 'POST', 'PUT', 'DELETE'],
 };
 
 app.use(cors(corsOptions));
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Servir /public
+app.use(express.static(path.join(__dirname, 'public')));
+
+// CORS para /images
+app.use('/images', (req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8100');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  next();
+});
+
+// Servir la carpeta /images
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 const db = require("./models");
 // normal use. Doesn't delete the database data
@@ -24,7 +41,7 @@ const db = require("./models");
 // });
 
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to autoescuela application."});
+  res.json({ message: "Welcome to autoescuela application." });
 });
 
 

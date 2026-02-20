@@ -32,6 +32,8 @@
           <ion-card-title>{{ pregunta.enunciado }}</ion-card-title>
         </ion-card-header>
 
+        <img *ngIf="pregunta.filename" src="http://localhost:8080/images/{{pregunta.filename}}" alt="image" width="200px">
+
         <ion-card-content>
           <ion-radio-group [formControlName]="pregunta.id_pregunta">
             <ion-item *ngFor="let opcion of pregunta.opciones" lines="none" class="opcion">

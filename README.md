@@ -45,7 +45,7 @@ _e instalas lo siguiente:_
 
 ```
 npm init
-npm install express, sequelize mysql2, dotenv, cors
+npm install express, sequelize mysql2, dotenv, cors, multer
 ```
 
 _Al principio tardará un poco ya que npm está creando la carpeta 'node_modules' que ocupa mucho espacio y son las configuraciones para ejecutar el proyecto con node. Obviamente dicha carpeta no puede almacenarse en el repositorio. De esta forma quedará configurado el backend y listo para ser ejecutado de la siguiente forma:_
