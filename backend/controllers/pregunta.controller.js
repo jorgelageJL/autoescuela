@@ -1,6 +1,8 @@
 const db = require("../models");
 const Pregunta = db.Pregunta;
 const Op = db.Sequelize.Op;
+const fs = require("fs");
+const path = require("path");
 // const utils = require("../utils.js");
 
 // Create a new Pregunta
@@ -55,14 +57,6 @@ exports.create = (req, res) => {
           err.message || "Some error occurred while creating the Pregunta."
       });
     });
-
-  // })
-  // .catch(err => {
-  //   res.status(500).send({
-  //     message:
-  //       err.message || "Some error occurred while retrieving tutorials."
-  //   });
-  // });
 };
 
 // Retrieve all Preguntas from the database.
@@ -123,53 +117,92 @@ exports.findAllByTest = (req, res) => {
 };
 
 // Update Pregunta by id
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
   const id = req.params.id;
+  try {
+    const pregunta = await Pregunta.findByPk(id);
+    if (!pregunta) {
+      return res.status(404).send({ message: "Pregunta not found." });
+    }
 
-  Pregunta.update(req.body, {
-    where: { id_pregunta: id }
-  })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: "Pregunta was updated successfully."
-        });
-      } else {
-        res.send({
-          message: `Cannot update Pregunta with id=${id}. Maybe Pregunta was not found or req.body is empty!`
+    // Armamos el objeto con los campos que sí se envían
+    let updatedData = { ...req.body };
+
+    // si llega archivo, actualizar filename
+    if (req.file) {
+      // si hay nueva imagen, eliminar la anterior
+      if (pregunta.filename) {
+        const oldImagePath = path.join(__dirname, '..', 'public', 'images', pregunta.filename);
+        fs.unlink(oldImagePath, (err) => {
+          if (err) console.error("Error deleting old image:", err);
+          else console.log("Old image deleted:", pregunta.filename);
         });
       }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Error updating Pregunta with id=" + id
-      });
+      updatedData.filename = req.file.filename;
+    }
+
+    const [num] = await Pregunta.update(updatedData, {
+      where: { id_pregunta: id }
     });
+
+    if (num === 1) {
+      res.send({
+        message: "Pregunta was updated successfully."
+      });
+    } else {
+      res.send({
+        message: `Cannot update Pregunta with id=${id}.`
+      });
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: "Error updating Pregunta with id=" + id
+    });
+  }
 };
 
 // Delete Pregunta by id
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
   const id = req.params.id;
-
-  Pregunta.destroy({
-    where: { id_pregunta: id }
-  })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: "Pregunta was deleted successfully!"
-        });
-      } else {
-        res.send({
-          message: `Cannot delete Pregunta with id=${id}. Maybe Pregunta was not found!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Could not delete Pregunta with id=" + id
+  try {
+    // 1. Buscar la bicicleta
+    const pregunta = await Pregunta.findByPk(id);
+    if (!pregunta) {
+      return res.status(404).send({
+        message: `Pregunta with id=${id} not found.`
       });
+    }
+
+    // 2. Si tiene imagen, borrarla del sistema de archivos
+    if (pregunta.filename) {
+      const imagePath = path.join(__dirname, "../public/images", pregunta.filename);
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+        console.log("🗑 Imagen eliminada:", pregunta.filename);
+      } else {
+        console.log("⚠️ Imagen no encontrada en disco:", imagePath);
+      }
+    }
+
+    // Borrar registro
+    const num = await Pregunta.destroy({
+      where: { id_pregunta: id }
     });
+
+    if (num === 1) {
+      res.send({
+        message: "Pregunta was deleted successfully."
+      });
+    } else {
+      res.status(404).send({
+        message: `Cannot delete Pregunta with id=${id}.`
+      });
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: "Error deleting Pregunta with id=" + id
+    });
+  }
 };
 
 // Delete all Preguntas from the database.

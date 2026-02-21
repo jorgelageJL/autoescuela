@@ -30,15 +30,36 @@ export class PreguntaService {
     );
   }
 
-  async createPregunta(pregunta: any) {
+  async createPregunta(pregunta: any, blob: any) {
+    let formData = new FormData();
+    formData.append("enunciado", pregunta.enunciado);
+    formData.append("opcion_a", pregunta.opcion_a);
+    formData.append("opcion_b", pregunta.opcion_b);
+    formData.append("opcion_c", pregunta.opcion_c);
+    formData.append("respuesta", pregunta.respuesta);
+    formData.append("tema", pregunta.tema);
+    formData.append("id_test", pregunta.id_test);
+    formData.append("filename", blob, "photo.jpg");
     return firstValueFrom(
-      this.httpClient.post(this.endPoint, pregunta)
+      this.httpClient.post(this.endPoint, formData)
     );
   }
 
-  async updatePregunta(pregunta: any) {
+  async updatePregunta(pregunta: any, blob: any) {
+    let formData = new FormData();
+    formData.append("id_pregunta", pregunta.id_pregunta);
+    formData.append("enunciado", pregunta.enunciado);
+    formData.append("opcion_a", pregunta.opcion_a);
+    formData.append("opcion_b", pregunta.opcion_b);
+    formData.append("opcion_c", pregunta.opcion_c);
+    formData.append("respuesta", pregunta.respuesta);
+    formData.append("tema", pregunta.tema);
+    formData.append("id_test", pregunta.id_test);
+    if (blob) {
+      formData.append("filename", blob, "photo.jpg");
+    }
     return firstValueFrom(
-      this.httpClient.put(`${this.endPoint}/${pregunta.id_pregunta}`, pregunta)
+      this.httpClient.put(`${this.endPoint}/${pregunta.id_pregunta}`, formData)
     );
   }
 }

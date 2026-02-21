@@ -17,7 +17,12 @@ module.exports = app => {
   router.get("/id_test/:id", /*auth.isAuthenticated,*/ Pregunta.findAllByTest);
 
   // Update Pregunta by id
-  router.put("/:id", Pregunta.update);
+  router.put("/:id", (req, res, next) => {
+    upload.single('filename')(req, res, function (err) {
+      if (err) console.log("Error multer:", err);
+      next();
+    });
+  }, Pregunta.update);
 
   // Delete Pregunta by id
   router.delete("/:id", Pregunta.delete);
