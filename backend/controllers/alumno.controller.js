@@ -1,7 +1,6 @@
 const db = require("../models");
 const Alumno = db.Alumno;
 const Op = db.Sequelize.Op;
-// const utils = require("../utils.js");
 // const  bcrypt  =  require('bcryptjs');
 
 // Create a new Alumno

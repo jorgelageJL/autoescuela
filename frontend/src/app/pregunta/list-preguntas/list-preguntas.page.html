@@ -52,9 +52,6 @@
               <ion-card-title>TEMA</ion-card-title>
             </ion-col>
             <ion-col>
-              <ion-card-title>IMAGEN</ion-card-title>
-            </ion-col>
-            <ion-col>
               <ion-card-title>TEST</ion-card-title>
             </ion-col>
             <ion-col>
@@ -70,7 +67,12 @@
           <ion-grid>
             <ion-row>
               <ion-col>
-                <ion-label>{{it.id_pregunta}}</ion-label>
+                <ion-button fill="clear" (click)="update(it)">
+                  <ion-avatar slot="start">
+                    <img *ngIf="it.filename" src="http://localhost:8080/images/{{it.filename}}" title="Editar elemento" alt="image" />
+                  </ion-avatar>
+                </ion-button>
+                {{it.id_pregunta}}
               </ion-col>
               <ion-col>
                 <ion-label>{{it.enunciado}}</ion-label>
@@ -91,16 +93,12 @@
                 <ion-label>{{it.tema}}</ion-label>
               </ion-col>
               <ion-col>
-                <ion-label>{{it.filename}}</ion-label>
-              </ion-col>
-              <ion-col>
                 <ion-label>{{it.id_test}}</ion-label>
               </ion-col>
-
-              <ion-button fill="clear" (click)="update(it)">
+              <!-- <ion-button fill="clear" (click)="update(it)">
                 <ion-icon name="create-outline"></ion-icon>
                 Editar
-              </ion-button>
+              </ion-button> -->
               <ion-button color="danger" fill="clear" (click)="delete(it)">
                 <ion-icon name="trash-outline"></ion-icon>
                 Borrar

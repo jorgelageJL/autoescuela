@@ -1,67 +1,95 @@
 const db = require("../models");
 const Administrador = db.Administrador;
-const Op = db.Sequelize.Op;
-// const utils = require("../utils.js");
-// const  bcrypt  =  require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
-// Create a new Administrador
-exports.create = (req, res) => {
-  // Validate request
-  if (!req.body.nombre || !req.body.apellidos || !req.body.dni
-    || !req.body.email || !req.body.password) {
-    res.status(400).send({
-      message: "Content can not be empty!"
-    });
-    return;
-  }
+exports.signin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-  // Create an Administrador
-  const administrador = {
-    nombre: req.body.nombre,
-    apellidos: req.body.apellidos,
-    dni: req.body.dni,
-    email: req.body.email,
-    password: req.body.password
-  };
-
-  // Administrador.findOne({ where: { dni: administrador.dni } })
-  //   .then(data => {
-  //     if (data) {
-  //       const result = bcrypt.compareSync(administrador.password, data.password);
-  //       if (!result) return res.status(401).send('Password not valid!');
-  //       const token = utils.generateToken(data);
-  //       // get basic user details
-  //       const userObj = utils.getCleanUser(data);
-  //       // return the token along with user details
-  //       return res.json({ user: userObj, access_token: token });
-  //     }
-
-  //     administrador.password = bcrypt.hashSync(req.body.password);
-
-  // Save new Administrador in the database
-  Administrador.create(administrador)
-    .then(data => {
-      // const token = utils.generateToken(data);
-      // get basic user details
-      // const userObj = utils.getCleanUser(data);
-      // return the token along with user details
-      // return res.json({ user: userObj, access_token: token });
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Administrador."
+    if (!email || !password) {
+      return res.status(400).json({
+        error: true,
+        message: "Email and Password required."
       });
+    }
+
+    const admin = await Administrador.findOne({ where: { email } });
+
+    if (!admin) {
+      return res.status(401).json({
+        error: true,
+        message: "Administrador not found."
+      });
+    }
+
+    const passwordIsValid = bcrypt.compareSync(password, admin.password);
+
+    if (!passwordIsValid) {
+      return res.status(401).json({
+        error: true,
+        message: "Invalid password."
+      });
+    }
+
+    // Payload limpio
+    const payload = {
+      id: admin.id_admin,
+      nombre: admin.nombre,
+      email: admin.email,
+      password: admin.password,
+      isAdmin: true
+    };
+
+    const token = jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: "8h" }
+    );
+
+    return res.json({
+      user: payload,
+      access_token: token
     });
 
-  // })
-  // .catch(err => {
-  //   res.status(500).send({
-  //     message:
-  //       err.message || "Some error occurred while retrieving tutorials."
-  //   });
-  // });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message || "Signin error"
+    });
+  }
+};
+
+exports.isAuthenticated = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+      return res.status(401).json({
+        message: "No token provided."
+      });
+    }
+
+    const token = authHeader.split(" ")[1]; // Bearer TOKEN
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(decoded)
+
+    const admin = await Administrador.findByPk(decoded.id);
+
+    if (!admin) {
+      return res.status(401).json({
+        message: "Invalid user."
+      });
+    }
+
+    req.user = decoded; // guardar datos del usuario
+    next();
+
+  } catch (err) {
+    return res.status(401).json({
+      message: "Invalid or expired token."
+    });
+  }
 };
 
 // Retrieve all Administradors from the database.
@@ -141,11 +169,39 @@ exports.findByPasswordAndDniOrEmail = (req, res) => {
     });
 };
 
+// Create a new Administrador
+exports.create = async (req, res) => {
+  try {
+    const administrador = {
+      nombre: req.body.nombre,
+      apellidos: req.body.apellidos,
+      dni: req.body.dni,
+      email: req.body.email,
+      password: bcrypt.hashSync(req.body.password, 8)
+    };
+
+    const data = await Administrador.create(administrador);
+    res.send(data);
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || "Error creating Administrador"
+    });
+  }
+};
+
 // Update an Administrador by id
 exports.update = (req, res) => {
   const id = req.params.id;
 
-  Administrador.update(req.body, {
+  const administrador = {
+    nombre: req.body.nombre,
+    apellidos: req.body.apellidos,
+    dni: req.body.dni,
+    email: req.body.email,
+    password: bcrypt.hashSync(req.body.password, 8)
+  };
+
+  Administrador.update(administrador, {
     where: { id_admin: id }
   })
     .then(num => {
@@ -207,17 +263,3 @@ exports.deleteAll = (req, res) => {
       });
     });
 };
-
-// // Find all published Tutorials
-// exports.findAllPublished = (req, res) => {
-//   User.findAll({ where: { published: true } })
-//     .then(data => {
-//       res.send(data);
-//     })
-//     .catch(err => {
-//       res.status(500).send({
-//         message:
-//           err.message || "Some error occurred while retrieving tutorials."
-//       });
-//     });
-// };
