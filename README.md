@@ -1,117 +1,201 @@
-# Autoescuela
+🚗 Autoescuela
 
-_Una aplicación para realizar test de autoescuela que simula el proceso que pasan los estudiantes para superar el examen de conducción._
+Aplicación web para realizar test de autoescuela que simula el proceso real que siguen los estudiantes para superar el examen teórico de conducción.
 
-## Comenzando 🚀
+El sistema permite gestión de:
 
-_Estas instrucciones te permitirán obtener una copia del proyecto en funcionamiento en tu máquina local para propósitos de desarrollo y pruebas._
+👨‍🎓 Alumnos
 
-Mira **Instalación** para conocer como ejecutar el proyecto en local.
+👨‍🏫 Profesores
 
+👑 Administrador
 
-### Pre-requisitos 📋
+📝 Tests y resultados
 
-_Ordenador con las instalaciones siguientes:_
+🚀 Comenzando
 
-```
-node, MySQL, git
-```
+Estas instrucciones te permitirán obtener una copia del proyecto en funcionamiento en tu máquina local para desarrollo y pruebas.
 
-### Instalación 🔧
+📋 Pre-requisitos
 
-_Una serie de ejemplos paso a paso que te dicen lo que debes hacer para clonarte el repositorio del proyecto y tenerlo en ejecución. Usamos git bash como terminal de comándos para desarrollar el proyecto_
+Tener instalado:
 
-_BACKEND_
+Node.js
 
-```
-git config --global user.email "...@gmail.com"
-git config --global user.name "tuNombreDeUsuario"
-git clone git@github.com:jorgelageJL/autoescuela.git
-```
+MySQL
 
-_Ahora verás la carpeta del proyecto 'autoescuela' clonada y dentro dos subcarpetas principales(.git no cuenta al tratarse de la propia herramienta para el control de versiones del proyecto), una con el backend y otra con el frontend. Entras al backend primero con el comando:_
+Git
 
-```
+Ionic CLI (npm install -g @ionic/cli)
+
+🔧 Instalación
+
+Usamos Git Bash o cualquier terminal compatible.
+
+📦 Clonar repositorio
+git config --global user.email "tuEmail@gmail.com"
+git config --global user.name "tuUsuario"
+
+git clone https://github.com/jorgelageJL/autoescuela.git
+cd autoescuela
+
+El proyecto tiene dos carpetas principales:
+
+backend
+
+frontend
+
+🔙 BACKEND
+
+Entrar en la carpeta:
+
 cd backend
-```
-_e instalas lo siguiente:_
 
-```
-npm init
-npm install express, sequelize mysql2, dotenv, cors
-```
+Instalar dependencias:
 
-_Al principio tardará un poco ya que npm está creando la carpeta 'node_modules' que ocupa mucho espacio y son las configuraciones para ejecutar el proyecto con node. Obviamente dicha carpeta no puede almacenarse en el repositorio. De esta forma quedará configurado el backend y listo para ser ejecutado de la siguiente forma:_
+npm install
 
-```
+(Si no existe package.json)
+
+npm init -y
+npm install express sequelize mysql2 dotenv cors bcryptjs jsonwebtoken
+⚙️ Configuración .env
+
+Crear un archivo .env dentro de backend:
+
+JWT_SECRET=AVeryStrongPassword
+MYSQL_DATABASE=autoescuela_db
+MYSQL_USER=root
+MYSQL_PASSWORD=1234
+MYSQL_ROOT_PASSWORD=1234
+DB_HOST=localhost
+NODE_ENV=development
+🔐 Seguridad implementada
+
+El sistema utiliza:
+
+bcrypt para encriptar contraseñas (hash + salt automático)
+
+JWT (JSON Web Tokens) para autenticación
+
+Variables de entorno con dotenv
+
+Middleware de protección de rutas
+
+Las contraseñas no se almacenan en texto plano.
+
+👑 Admin inicial automático
+
+Al iniciar el servidor por primera vez, se crea automáticamente un usuario administrador inicial si no existe.
+
+Esto permite acceder al sistema sin necesidad de registro manual del primer admin.
+
+Ejemplo:
+
+Rol: ADMIN
+
+Email: admin@autoescuela.com
+
+Password: admin123
+(La contraseña está encriptada con bcrypt)
+
+▶️ Ejecutar backend
 node index.js
-```
 
-_FRONTEND_
+El servidor se ejecutará en:
 
-```
+http://localhost:3000
+🎨 FRONTEND
+
+Entrar en la carpeta:
+
 cd frontend
-npm init
+
+Instalar dependencias:
+
+npm install
+
+Ejecutar:
+
 ionic serve
-```
 
+Se abrirá en:
 
-### Documentación de apoyo ⌨️
+http://localhost:8100
+🏗️ Arquitectura del proyecto
+Backend
 
-```
-https://sequelize.org/docs/v6/core-concepts/assocs/
-https://www.bezkoder.com/node-js-express-sequelize-mysql/
-https://www.bezkoder.com/sequelize-associate-one-to-many/
-https://github.com/tcrurav/Many2OneExpress
-https://www.bezkoder.com/sequelize-associate-many-to-many/
-```
+Express
 
-_Conceptos de asociaciones con ejemplos prácticos_
+Sequelize (ORM)
 
-## Despliegue en GitHub 📦
+MySQL
 
-_Siempre situarse en la carpeta raíz del proyecto(o sea dentro de 'autoescuela' donde aparecen las carpetas frontend, backend y los archivos .gitignore y README.md) y escribir en la consola lo siguiente:_
+JWT
 
-```
+bcrypt
+
+Frontend
+
+Angular
+
+Ionic
+
+TypeScript
+
+🔄 Flujo de autenticación
+
+Usuario inicia sesión
+
+Backend valida contraseña con bcrypt.compare
+
+Se genera un JWT
+
+El frontend guarda el token
+
+Las rutas protegidas validan el token
+
+📦 Despliegue en GitHub
+
+Situarse en la carpeta raíz (autoescuela):
+
 git add .
-git commit -m "algo ..."
-git remote add origin https://github.com/jorgelageJL/autoescuela.git
-git push
-```
+git commit -m "Mensaje descriptivo"
+git push origin dani-cambios
+🛠 Construido con
 
-## Construido con 🛠️
+Visual Studio Code
 
-_Visual Studio Code, Git bash, TypeScript, Express, Multer, JWT_
+Git
 
-```
-* [node](https://nodejs.org/es)
-* [Sequelize](https://sequelize.org/docs/v6/getting-started/)
-* [MySQL](https://dev.mysql.com/doc/)
+Node.js
 
-framework web usado
-* [Angular](https://angular.dev/overview)
-```
+Express
 
-## Autores ✒️
+Sequelize
 
-_Estamos muy comprometidos con la asignatura y les agradecemos por todo el apoyo recibido_
+MySQL
 
-* **Jorge González Lage** - *Backend* - [jorgelageJL](https://github.com/jorgelageJL)
-* **Daniel Padrón Reyes** - *Frontend* - [Danipr2425](https://github.com/Danipr2425)
+Angular
 
-## Licencia 📄
+Ionic
 
-Este proyecto está bajo la Licencia MIT.
+JWT
 
-## Expresiones de Gratitud 🎁
+bcrypt
 
-* Comenta a otros sobre este proyecto 📢
-* Invita una cerveza 🍺 o un café ☕ a alguien del equipo. 
-* Da las gracias públicamente 🤓.
-* etc.
+✒️ Autores
 
+Jorge González Lage – Backend – jorgelageJL
+Daniel Padrón Reyes – Frontend – Danipr2425
 
+📄 Licencia
 
----
-⌨️ con ❤️ por [jorgelageJL](https://github.com/jorgelageJL) 
-y [Danipr2425](https://github.com/Danipr2425) 😊
+Proyecto bajo Licencia MIT.
+
+🎁 Agradecimientos
+
+Proyecto desarrollado como parte de la asignatura.
+Gracias por el apoyo y seguimiento durante el desarrollo.
+
+⌨️ con ❤️ por jorgelageJL y Danipr2425 🚗
