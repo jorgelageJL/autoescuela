@@ -1,4 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
+
   const Profesor = sequelize.define("profesor", {
     id_profesor: {
       type: Sequelize.INTEGER,

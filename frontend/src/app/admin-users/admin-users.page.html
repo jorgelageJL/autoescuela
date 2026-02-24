@@ -35,7 +35,7 @@
 
   <hr class="ion-margin" />
 
-  <!-- LA PARTE PARA RELLENAR LOS DATOS -->
+  <!-- RELLENAR LOS DATOS -->
   <ion-item>
     <ion-label position="floating">Nombre</ion-label>
     <ion-input [(ngModel)]="usuario.nombre"></ion-input>
@@ -64,11 +64,6 @@
   <ion-item *ngIf="tipo === 'alumno'">
     <ion-label position="floating">ID Profesor</ion-label>
     <ion-input type="number" [(ngModel)]="usuario.id_profesor"></ion-input>
-  </ion-item>
-
-  <ion-item *ngIf="tipo === 'profesor'">
-    <ion-label position="floating">ID Admin</ion-label>
-    <ion-input type="number" [(ngModel)]="usuario.id_admin"></ion-input>
   </ion-item>
 
   <!-- CRUD -->

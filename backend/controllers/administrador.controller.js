@@ -2,7 +2,7 @@ const db = require("../models");
 const Administrador = db.Administrador;
 const Op = db.Sequelize.Op;
 // const utils = require("../utils.js");
-// const  bcrypt  =  require('bcryptjs');
+const  bcrypt  =  require('bcryptjs');
 
 // Create a new Administrador
 exports.create = (req, res) => {
@@ -15,14 +15,20 @@ exports.create = (req, res) => {
     return;
   }
 
-  // Create an Administrador
-  const administrador = {
+const administrador = {
     nombre: req.body.nombre,
     apellidos: req.body.apellidos,
     dni: req.body.dni,
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password // el modelo lo encripta
   };
+  Administrador.create(administrador)
+    .then(data => res.send(data))
+    .catch(err => {
+      res.status(500).send({
+        message: err.message || "Error creating Administrador."
+      });
+    });
 
   // Administrador.findOne({ where: { dni: administrador.dni } })
   //   .then(data => {
@@ -37,23 +43,6 @@ exports.create = (req, res) => {
   //     }
 
   //     administrador.password = bcrypt.hashSync(req.body.password);
-
-  // Save new Administrador in the database
-  Administrador.create(administrador)
-    .then(data => {
-      // const token = utils.generateToken(data);
-      // get basic user details
-      // const userObj = utils.getCleanUser(data);
-      // return the token along with user details
-      // return res.json({ user: userObj, access_token: token });
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Administrador."
-      });
-    });
 
   // })
   // .catch(err => {
@@ -101,16 +90,21 @@ exports.findOne = (req, res) => {
 
 // Find Administrador by dni or email
 exports.findByDniOrEmail = (req, res) => {
-  const field = req.params.field
 
-  Administrador.findOne({ where: { dni: field } || { email: field } })
-    .then(data => {
-      res.send(data);
-    })
+  const field = req.params.field;
+
+  Administrador.findOne({
+    where: {
+      [Op.or]: [
+        { dni: field },
+        { email: field }
+      ]
+    }
+  })
+    .then(data => res.send(data))
     .catch(err => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving an Administrador."
+        message: err.message || "Error retrieving Administrador."
       });
     });
 };
@@ -220,4 +214,51 @@ exports.deleteAll = (req, res) => {
 //           err.message || "Some error occurred while retrieving tutorials."
 //       });
 //     });
+exports.login = async (req, res) => {
+
+  if (!req.body.password || (!req.body.dni && !req.body.email)) {
+    return res.status(400).send({
+      message: "Content can not be empty!"
+    });
+  }
+
+  try {
+
+    const admin = await Administrador.findOne({
+      where: {
+        [Op.or]: [
+          { dni: req.body.dni },
+          { email: req.body.email }
+        ]
+      }
+    });
+
+    if (!admin) {
+      return res.status(404).send({
+        message: "Administrador not found."
+      });
+    }
+
+    const passwordIsValid = bcrypt.compareSync(
+      req.body.password,
+      admin.password
+    );
+
+    if (!passwordIsValid) {
+      return res.status(401).send({
+        message: "Invalid password."
+      });
+    }
+
+    res.send({
+      message: "Login successful",
+      administrador: admin
+    });
+
+  } catch (error) {
+    res.status(500).send({
+      message: "Error during login."
+    });
+  }
+};
 // };

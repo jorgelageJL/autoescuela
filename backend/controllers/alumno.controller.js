@@ -1,29 +1,58 @@
 const db = require("../models");
 const Alumno = db.Alumno;
 const Op = db.Sequelize.Op;
+const bcrypt = require("bcryptjs");
 // const utils = require("../utils.js");
-// const  bcrypt  =  require('bcryptjs');
 
 // Create a new Alumno
 exports.create = (req, res) => {
-  // Validate request
+
   if (!req.body.nombre || !req.body.apellidos || !req.body.dni
     || !req.body.email || !req.body.password || !req.body.id_profesor) {
-    res.status(400).send({
+    return res.status(400).send({
       message: "Content can not be empty!"
     });
-    return;
   }
 
-  // Create an Alumno
+  const hashedPassword = bcrypt.hashSync(req.body.password, 10);
+
   const alumno = {
     nombre: req.body.nombre,
     apellidos: req.body.apellidos,
     dni: req.body.dni,
     email: req.body.email,
-    password: req.body.password,
+    password: hashedPassword,
     id_profesor: req.body.id_profesor
   };
+
+  Alumno.create(alumno)
+    .then(data => res.status(201).send(data))
+    .catch(err => {
+      res.status(500).send({
+        message: err.message || "Error creating Alumno."
+      });
+    });
+
+exports.findByAlumno = (req, res) => {
+
+  const id = req.params.id;
+
+  db.Resultado.findAll({
+    where: { id_alumno: id },
+    include: [{
+      model: db.Test,
+      attributes: ['nombre']
+    }]
+  })
+  .then(data => {
+    res.send(data);
+  })
+  .catch(err => {
+    res.status(500).send({
+      message: err.message
+    });
+  });
+};
 
   // Alumno.findOne({ where: { dni: Alumno.dni } })
   //   .then(data => {
@@ -38,24 +67,6 @@ exports.create = (req, res) => {
   //     }
 
   //     administrador.password = bcrypt.hashSync(req.body.password);
-
-  // Save new Alumno in the database
-  Alumno.create(alumno)
-    .then(data => {
-      // const token = utils.generateToken(data);
-      // get basic user details
-      // const userObj = utils.getCleanUser(data);
-      // return the token along with user details
-      // return res.json({ user: userObj, access_token: token });
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Alumno."
-      });
-    });
-
   // })
   // .catch(err => {
   //   res.status(500).send({
@@ -102,21 +113,37 @@ exports.findOne = (req, res) => {
 
 // Find an Alumno by password and dni or email
 exports.findByPasswordAndDniOrEmail = (req, res) => {
-  // Validate request
-  if (!req.body.password || !req.body.dni && !req.body.email) {
-    res.status(400).send({
+
+  if (!req.body.password || (!req.body.dni && !req.body.email)) {
+    return res.status(400).send({
       message: "Content can not be empty!"
     });
-    return;
   }
 
-  const password = req.body.password;
-  const dni = req.body.dni;
-  const condition = dni ? { dni: dni, password: password } : { email: req.body.email, password: password };
+  const { password, dni, email } = req.body;
+
+  const condition = dni ? { dni: dni } : { email: email };
 
   Alumno.findOne({ where: condition })
     .then(data => {
+
+      if (!data) {
+        return res.status(404).send({
+          message: "Alumno not found."
+        });
+      }
+
+      // 🔐 Comparar contraseña encriptada
+      const passwordIsValid = bcrypt.compareSync(password, data.password);
+
+      if (!passwordIsValid) {
+        return res.status(401).send({
+          message: "Invalid password."
+        });
+      }
+
       res.send(data);
+
     })
     .catch(err => {
       res.status(500).send({

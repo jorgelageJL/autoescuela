@@ -13,24 +13,21 @@
   Volver al Menú de entrada
 </ion-button>
   
-  <ion-list *ngIf="tests.length > 0; else noTests">
-    <ion-item *ngFor="let test of tests">
-  <ion-label>
-    <h2>{{ test.nombre }}</h2>
-  </ion-label>
+<ion-list *ngIf="tests && tests.length > 0; else noTests">
+  <ion-item *ngFor="let test of tests">
+    <ion-label>
+      <h2>{{ test.nombre }}</h2>
+      <p>ID: {{ test.id_test }}</p>
+    </ion-label>
 
-  <ion-button 
-    slot="end" 
-    color="primary"
-    (click)="hacerTest(test.id_test)">
-    Hacer test
-  </ion-button>
-	</ion-item>
-  </ion-list>
+    <ion-button slot="end" color="success" (click)="hacerTest(test.id_test)">
+      Hacer Test
+    </ion-button>
+  </ion-item>
+</ion-list>
 
-  <ng-template #noTests>
-    <div class="no-tests">
-      No hay tests disponibles.
-    </div>
-  </ng-template>
-</ion-content>
+<ng-template #noTests>
+  <div class="no-tests">
+    No hay tests disponibles.
+  </div>
+</ng-template>

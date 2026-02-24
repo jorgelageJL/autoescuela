@@ -98,4 +98,31 @@ export class UsuarioService {
   eliminarPregunta(id: number): Observable<any> {
     return this.http.delete(`${this.API_URL}/preguntas/${id}`);
   }
+
+// RESULTADOS
+getResultados(): Observable<any> {
+  return this.http.get(`${this.API_URL}/resultados`);
+}
+
+getResultadosPorAlumno(id_alumno: number): Observable<any> {
+  return this.http.get(`${this.API_URL}/resultados?id_alumno=${id_alumno}`);
+}
+
+getResultado(id_test: number, id_alumno: number): Observable<any> {
+  return this.http.get(`${this.API_URL}/resultados/${id_test}/${id_alumno}`);
+}
+
+crearResultado(data: any): Observable<any> {
+  return this.http.post(`${this.API_URL}/resultados`, data);
+}
+
+actualizarResultado(id_test: number, id_alumno: number, data: any): Observable<any> {
+  return this.http.put(`${this.API_URL}/resultados/${id_test}/${id_alumno}`, data);
+}
+
+eliminarResultado(id_test: number, id_alumno: number): Observable<any> {
+  return this.http.delete(`${this.API_URL}/resultados/${id_test}/${id_alumno}`);
+}
+
+
 }

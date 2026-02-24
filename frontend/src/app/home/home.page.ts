@@ -26,4 +26,9 @@ export class HomePage {
 	logout(){
 		this.router.navigateByUrl("/login");
 	}
+	goToResults() {
+	  this.router.navigate(['/results']);
+	}
+
+
 }

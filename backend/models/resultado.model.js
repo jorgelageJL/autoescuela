@@ -1,26 +1,26 @@
 module.exports = (sequelize, Sequelize) => {
   const Resultado = sequelize.define("resultado", {
-    id_test: {
-      // type: DataTypes.INTEGER,
-      type: Sequelize.INTEGER,
-      primaryKey: true,
-      allowNull: false,
-    },
+
     id_alumno: {
-      // type: DataTypes.INTEGER,
       type: Sequelize.INTEGER,
-      primaryKey: true,
-      allowNull: false,
+      primaryKey: true
     },
-    fecha: {
-      type: 'DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL',
-      allowNull: false,
-      defaultValue: () => new Date()
+
+    id_test: {
+      type: Sequelize.INTEGER,
+      primaryKey: true
     },
+
     nota: {
-      type: Sequelize.FLOAT,
-      allowNull: false,
+      type: Sequelize.DECIMAL,
+      allowNull: false
     },
+
+    fecha: {
+      type: Sequelize.DATE,
+      defaultValue: Sequelize.NOW
+    }
+
   }, {
     timestamps: false
   });

@@ -1,158 +1,100 @@
-const dbConfig = require("../config/db.config");
-// const fs = require('fs');
-// const path = require('path');
-const Sequelize = require('sequelize');
-// const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.js')[env];
+const Sequelize = require("sequelize");
+const config = require("../config/db.config.js");
+
+const sequelize = new Sequelize(
+  config.DB,
+  config.USER,
+  config.PASSWORD,
+  {
+    host: config.HOST,
+    dialect: config.dialect,
+  }
+);
 
 const db = {};
-
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
-
-// fs
-//   .readdirSync(__dirname)
-//   .filter(file => {
-//     return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
-//   })
-//   .forEach(file => {
-//     const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-//     db[model.name] = model;
-//   });
-
-// Object.keys(db).forEach(modelName => {
-//   if (db[modelName].associate) {
-//     db[modelName].associate(db);
-//   }
-// });
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
+/* ===========================
+   MODELOS
+=========================== */
+
 db.Administrador = require("./administrador.model.js")(sequelize, Sequelize);
-db.Test = require("./test.model.js")(sequelize, Sequelize);
-db.Pregunta = require("./pregunta.model.js")(sequelize, Sequelize);
-db.Profesor = require("./profesor.model.js")(sequelize, Sequelize);
-db.Alumno = require("./alumno.model.js")(sequelize, Sequelize);
-db.Resultado = require("./resultado.model.js")(sequelize, Sequelize);
+db.Profesor      = require("./profesor.model.js")(sequelize, Sequelize);
+db.Alumno        = require("./alumno.model.js")(sequelize, Sequelize);
+db.Test          = require("./test.model.js")(sequelize, Sequelize);
+db.Pregunta      = require("./pregunta.model.js")(sequelize, Sequelize);
+db.Resultado     = require("./resultado.model.js")(sequelize, Sequelize);
 
-/**
- * RELACIÓN ONE TO MANY
- * Administrador -> Test
- */
+/* ===========================
+   RELACIONES
+=========================== */
+
+/* 🔹 Administrador -> Test */
 db.Administrador.hasMany(db.Test, {
-  foreignKey: {
-    name: 'id_admin',
-    allowNull: false
-  },
-  onDelete: 'CASCADE'
+  foreignKey: "id_admin",
+  onDelete: "CASCADE"
 });
-
 db.Test.belongsTo(db.Administrador, {
-  foreignKey: {
-    name: 'id_admin',
-    allowNull: false
-  },
-  onDelete: 'CASCADE'
+  foreignKey: "id_admin"
 });
 
-/**
- * RELACIÓN ONE TO MANY
- * Test -> Preguntas
- */
+/* 🔹 Test -> Pregunta */
 db.Test.hasMany(db.Pregunta, {
-  foreignKey: {
-    name: 'id_test',
-    allowNull: false
-  },
-  onDelete: 'CASCADE'
+  foreignKey: "id_test",
+  onDelete: "CASCADE"
 });
-
 db.Pregunta.belongsTo(db.Test, {
-  foreignKey: {
-    name: 'id_test',
-    allowNull: false
-  },
-  onDelete: 'CASCADE'
+  foreignKey: "id_test"
 });
 
-/**
- * RELACIÓN ONE TO MANY
- * Administrador -> Profesores
- */
+/* 🔹 Administrador -> Profesor */
 db.Administrador.hasMany(db.Profesor, {
-  foreignKey: {
-    name: 'id_admin',
-    allowNull: false
-  },
-  onDelete: 'CASCADE'
+  foreignKey: "id_admin",
+  onDelete: "CASCADE"
 });
-
 db.Profesor.belongsTo(db.Administrador, {
-  foreignKey: {
-    name: 'id_admin',
-    allowNull: false
-  },
-  onDelete: 'CASCADE'
+  foreignKey: "id_admin"
 });
 
-/**
- * RELACIÓN ONE TO MANY
- * Profesor -> Alumnos
- */
+/* 🔹 Profesor -> Alumno */
 db.Profesor.hasMany(db.Alumno, {
-  foreignKey: {
-    name: 'id_profesor',
-    allowNull: false
-  },
-  onDelete: 'CASCADE'
+  foreignKey: "id_profesor",
+  onDelete: "CASCADE"
 });
-
 db.Alumno.belongsTo(db.Profesor, {
-  foreignKey: {
-    name: 'id_profesor',
-    allowNull: false
-  },
-  onDelete: 'CASCADE'
+  foreignKey: "id_profesor"
 });
 
-/**
- * RELACIÓN MANY TO MANY
- * Alumno <-> Test
- */
+/* ===========================
+   MANY TO MANY
+   Alumno <-> Test
+   Tabla intermedia: Resultado
+=========================== */
+
 db.Alumno.belongsToMany(db.Test, {
   through: db.Resultado,
-  foreignKey: {
-    name: 'id_alumno',
-    allowNull: false
-  },
-  onDelete: 'CASCADE'
+  foreignKey: "id_alumno",
+  otherKey: "id_test",
+  onDelete: "CASCADE"
 });
 
 db.Test.belongsToMany(db.Alumno, {
   through: db.Resultado,
-  foreignKey: {
-    name: 'id_test',
-    allowNull: false
-  },
-  onDelete: 'CASCADE',
-  fecha: {
-    type: 'DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL',
-    allowNull: false,
-    defaultValue: () => new Date()
-  },
-  nota: {
-    type: Sequelize.DECIMAL,
-    allowNull: false,
-    defaultValue: 2.0
-  },
-}, {
-  timestamps: false
+  foreignKey: "id_test",
+  otherKey: "id_alumno",
+  onDelete: "CASCADE"
+});
+
+/* 🔥 IMPORTANTE PARA PODER HACER INCLUDE DESDE RESULTADO */
+
+db.Resultado.belongsTo(db.Alumno, {
+  foreignKey: "id_alumno"
+});
+
+db.Resultado.belongsTo(db.Test, {
+  foreignKey: "id_test"
 });
 
 module.exports = db;

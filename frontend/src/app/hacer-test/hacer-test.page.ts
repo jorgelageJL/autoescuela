@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PreguntaService } from '../services/pregunta';
 import { Router } from '@angular/router';
+import { UsuarioService } from '../services/usuario';
 
 @Component({
   selector: 'app-hacer-test',
@@ -39,13 +40,12 @@ getClase(pregunta: any, opcion: string): string {
 }
 finalizarTest() {
 
-  // Verifica que todas estén respondidas
   const sinResponder = this.preguntas.some((p: any) => !p.respondida);
   if (sinResponder) {
     alert('Debes responder todas las preguntas');
     return;
   }
-  
+
   let correctas = 0;
 
   this.preguntas.forEach((pregunta: any) => {
@@ -53,19 +53,45 @@ finalizarTest() {
     if (pregunta.seleccionada === 'A') textoSeleccionado = pregunta.opcion_a;
     if (pregunta.seleccionada === 'B') textoSeleccionado = pregunta.opcion_b;
     if (pregunta.seleccionada === 'C') textoSeleccionado = pregunta.opcion_c;
+
     if (textoSeleccionado === pregunta.respuesta) {
       correctas++;
     }
   });
+
   this.nota = correctas;
   this.mostrarResultado = true;
+  this.guardarResultado();
 }
+guardarResultado() {
 
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
+
+  console.log("USER:", user);
+
+  if (!user || !user.id) {
+    console.error("No hay alumno logueado");
+    return;
+  }
+
+  const resultado = {
+    id_test: this.id,
+    id_alumno: user.id,
+    nota: this.nota
+  };
+
+  this.usuarioService.crearResultado(resultado)
+    .subscribe({
+      next: () => console.log("Resultado guardado"),
+      error: (err) => console.error(err)
+    });
+}
 
   constructor(
     private preguntaService: PreguntaService,
     private route: ActivatedRoute,
-	private router: Router
+	private router: Router,
+	private usuarioService: UsuarioService
   ) { }
 
 

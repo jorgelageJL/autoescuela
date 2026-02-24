@@ -3,31 +3,45 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
-  },
-  {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {
+    path: 'login',
+    loadChildren: () => import('./login/login.module')
+      .then(m => m.LoginPageModule)
+  },
+  {
     path: 'tests',
-    loadChildren: () => import('./tests/tests.module').then( m => m.TestsPageModule)
+    loadChildren: () => import('./tests/tests.module')
+      .then(m => m.TestsPageModule)
+  },
+  {
+  path: 'home',
+  loadChildren: () => import('./home/home.module')
+    .then(m => m.HomePageModule)
   },
   {
     path: 'hacer-test/:id',
-    loadChildren: () => import('./hacer-test/hacer-test.module').then( m => m.HacerTestPageModule)
-  },  {
+    loadChildren: () => import('./hacer-test/hacer-test.module')
+      .then(m => m.HacerTestPageModule)
+  },
+  {
     path: 'admin-users',
-    loadChildren: () => import('./admin-users/admin-users.module').then( m => m.AdminUsersPageModule)
+    loadChildren: () => import('./admin-users/admin-users.module')
+      .then(m => m.AdminUsersPageModule)
   },
   {
     path: 'admin-tests',
-    loadChildren: () => import('./admin-tests/admin-tests.module').then( m => m.AdminTestsPageModule)
+    loadChildren: () => import('./admin-tests/admin-tests.module')
+      .then(m => m.AdminTestsPageModule)
   },
-
-
+  {
+    path: 'results',
+    loadChildren: () => import('./pages/results/results.module')
+      .then(m => m.ResultsPageModule)
+  }
 ];
 
 @NgModule({
