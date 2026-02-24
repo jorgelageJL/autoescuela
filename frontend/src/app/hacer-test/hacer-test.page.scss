@@ -1,0 +1,108 @@
+ion-content {
+  --background: #f4f6f9;
+}
+
+ion-item {
+  margin: 12px;
+  border-radius: 12px;
+  --background: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+ion-label h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 10px;
+}
+
+ion-label p {
+  font-size: 14px;
+  padding: 8px;
+  border-radius: 8px;
+  background: #f1f3f5;
+  margin-bottom: 6px;
+  transition: all 0.2s ease;
+}
+
+ion-label p:hover {
+  background: #e0e7ff;
+  cursor: pointer;
+}
+
+.no-preguntas {
+  text-align: center;
+  margin-top: 40px;
+  color: #888;
+  font-size: 15px;
+}
+
+.opcion {
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  background: #f1f3f5;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.opcion:hover {
+  background: #e2e6ea;
+}
+
+.correcta {
+  background: #28a745 !important;
+  color: white;
+}
+
+.incorrecta {
+  background: #dc3545 !important;
+  color: white;
+}
+.resultado-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.resultado-card {
+  width: 90%;
+  max-width: 400px;
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.resultado-card h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.nota {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.estado {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 12px;
+  border-radius: 14px;
+  margin-bottom: 20px;
+}
+
+.aprobado {
+  background: #e6f9ed;
+  color: #28a745;
+}
+
+.suspenso {
+  background: #fdeaea;
+  color: #dc3545;
+}
+

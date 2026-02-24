@@ -1,0 +1,239 @@
+<ion-header>
+  <ion-toolbar color="primary">
+
+    <ion-buttons slot="start">
+      <ion-button (click)="volverHome()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>Gestión de Usuarios</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- SELECTOR TIPO -->
+  <ion-item>
+    <ion-label>Tipo</ion-label>
+    <ion-segment [(ngModel)]="tipo" (ionChange)="cargarListado()">
+      <ion-segment-button value="alumno">
+        <ion-label>Alumno</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="profesor">
+        <ion-label>Profesor</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-item>
+
+  <!-- AQUI SE SELECCIONA SEGUN TIPO -->
+
+  <ion-button expand="block" color="medium" (click)="abrirSelector()">
+    Seleccionar {{ tipo }}
+  </ion-button>
+
+  <hr class="ion-margin" />
+
+  <form #form="ngForm">
+    <!-- LA PARTE PARA RELLENAR LOS DATOS -->
+    <ion-item>
+      <ion-label position="floating">ID {{ tipo }}</ion-label>
+      <br />
+      <ion-input type="number" name="id" [(ngModel)]="usuario.id" placeholder="ID {{ tipo }}" readonly></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Nombre</ion-label>
+      <br />
+      <ion-input type="text" name="nombre" [(ngModel)]="usuario.nombre" #nombre="ngModel" placeholder="Nombre"
+        required></ion-input>
+      <ion-text color="danger" *ngIf="nombre.touched && nombre.invalid">
+        obligatorio
+      </ion-text>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Apellidos</ion-label>
+      <br />
+      <ion-input type="text" name="apellidos" [(ngModel)]="usuario.apellidos" #apellidos="ngModel"
+        placeholder="Apellidos" required></ion-input>
+      <ion-text color="danger" *ngIf="apellidos.touched && apellidos.invalid">
+        obligatorio
+      </ion-text>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">DNI</ion-label>
+      <br />
+      <ion-input type="text" name="dni" [(ngModel)]="usuario.dni" #dni="ngModel" placeholder="DNI" required></ion-input>
+      <ion-text color="danger" *ngIf="dni.touched && dni.invalid">
+        obligatorio
+      </ion-text>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <br />
+      <ion-input type="text" name="email" [(ngModel)]="usuario.email" #email="ngModel" placeholder="Email"
+        required></ion-input>
+      <ion-text color="danger" *ngIf="email.touched && email.invalid">
+        obligatorio
+      </ion-text>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <br />
+      <ion-input type="password" name="password" [(ngModel)]="usuario.password" #password="ngModel"
+        placeholder="Password" required></ion-input>
+      <ion-text color="danger" *ngIf="password.touched && password.invalid">
+        obligatorio
+      </ion-text>
+    </ion-item>
+
+    <ion-item *ngIf="tipo === 'alumno'">
+      <ion-label position="floating">ID Profesor</ion-label>
+      <br />
+      <ion-input type="number" name="id_profesor" [(ngModel)]="usuario.id_profesor" #id_profesor="ngModel"
+        placeholder="ID Profesor" required></ion-input>
+      <ion-text color="danger" *ngIf="id_profesor.touched && id_profesor.invalid">
+        obligatorio
+      </ion-text>
+    </ion-item>
+
+    <ion-item *ngIf="tipo === 'profesor'">
+      <ion-label position="floating">ID Admin</ion-label>
+      <br />
+      <ion-input type="number" name="id_admin" [(ngModel)]="usuario.id_admin" #id_admin="ngModel" placeholder="ID Admin"
+        required></ion-input>
+      <ion-text color="danger" *ngIf="id_admin.touched && id_admin.invalid">
+        obligatorio
+      </ion-text>
+    </ion-item>
+
+    <!-- CRUD -->
+    <ion-grid class="ion-margin-top">
+      <ion-row>
+        <ion-col size="6">
+          <ion-button type="submit" [disabled]="form.invalid" expand="block" color="primary" (click)="crear(form)">
+            Crear
+          </ion-button>
+        </ion-col>
+
+        <ion-col size="6">
+          <ion-button type="submit" [disabled]="form.invalid" expand="block" color="warning" (click)="actualizar(form)">
+            Actualizar
+          </ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="ion-margin-top">
+        <ion-col size="6">
+          <ion-button type="submit" [disabled]="form.invalid" expand="block" color="danger" (click)="eliminar(form)">
+            Eliminar
+          </ion-button>
+        </ion-col>
+
+        <ion-col size="6">
+          <ion-button expand="block" color="success" (click)="limpiarTodo(form)">
+            Limpiar
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+
+  <hr class="ion-margin" />
+
+  <!-- CABECERA DE LA TABLA DE ALUMNOS O PROFESORES -->
+  <h2>
+    <ion-label>Listado de {{ tipo === 'alumno' ? 'Alumnos' : 'Profesores'}}</ion-label>
+  </h2>
+
+  <ion-card color="secondary">
+    <ion-card-header>
+      <ion-item color="secondary" lines="none">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-card-title>ID</ion-card-title>
+            </ion-col>
+            <ion-col>
+              <ion-card-title>NOMBRE</ion-card-title>
+            </ion-col>
+            <ion-col>
+              <ion-card-title>APELLIDOS</ion-card-title>
+            </ion-col>
+            <ion-col>
+              <ion-card-title>DNI</ion-card-title>
+            </ion-col>
+            <ion-col>
+              <ion-card-title>EMAIL</ion-card-title>
+            </ion-col>
+            <ion-col>
+              <ion-card-title>PASSWORD</ion-card-title>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-card-header>
+  </ion-card>
+
+  <!-- LISTA DE ALUMNOS O PROFESORES, SEGUN SELECCION INICIAL -->
+  <ion-list>
+    <ion-item *ngFor="let item of listado" (click)="seleccionarDesdeModal(item)" [class.selected]="
+        (tipo === 'alumno' && usuarioSeleccionado?.id_alumno === item.id_alumno) ||
+        (tipo === 'profesor' && usuarioSeleccionado?.id_profesor === item.id_profesor)">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-label>{{ tipo === 'alumno' ? item.id_alumno : item.id_profesor }}</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label>{{ item.nombre }}</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label>{{ item.apellidos }}</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label>{{ item.dni }}</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label>{{ item.email }}</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label>{{ item.password }}</ion-label>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </ion-list>
+
+  <!-- MODAL PARA SELECCIONAR ALUMNOS O PROFESORES -->
+  <ion-modal [isOpen]="mostrarModal" (didDismiss)="cerrarSelector()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar color="primary">
+          <ion-title>Seleccionar {{ tipo }}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="cerrarSelector()">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content>
+        <ion-list>
+          <ion-item *ngFor="let item of listado" (click)="seleccionarDesdeModal(item)">
+
+            <ion-label>
+              <h2>{{ item.nombre }} {{ item.apellidos }}</h2>
+              <p>ID: {{ tipo === 'alumno' ? item.id_alumno : item.id_profesor }}</p>
+            </ion-label>
+
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

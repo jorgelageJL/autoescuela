@@ -1,0 +1,28 @@
+ion-header {
+  --background: #3880ff;
+  color: white;
+}
+
+.no-tests {
+  text-align: center;
+  margin-top: 50%;
+  font-size: 1.2rem;
+  color: gray;
+}
+
+ion-item {
+  --background: #f8f9fa;
+  margin: 5px 10px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+
+  h2 {
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: #666;
+  }
+}

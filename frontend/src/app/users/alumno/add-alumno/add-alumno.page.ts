@@ -55,7 +55,7 @@ export class AddAlumnoPage {
       await this.usuarioService.createAlumno(this.usuarioForm.value);
     }
 
-    this.router.navigateByUrl("list-alumnos");
+    this.router.navigateByUrl("home");
   }
 
   logout() {

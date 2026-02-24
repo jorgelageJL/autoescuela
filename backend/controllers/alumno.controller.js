@@ -1,7 +1,7 @@
 const db = require("../models");
 const Alumno = db.Alumno;
-const Op = db.Sequelize.Op;
-// const  bcrypt  =  require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 // Create a new Alumno
 exports.create = (req, res) => {
@@ -128,6 +128,8 @@ exports.findByPasswordAndDniOrEmail = (req, res) => {
 // Update an Alumno by id
 exports.update = (req, res) => {
   const id = req.params.id;
+  console.log(id)
+  console.log(req.body.id_alumno)
 
   Alumno.update(req.body, {
     where: { id_alumno: id }

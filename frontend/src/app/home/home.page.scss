@@ -1,27 +1,86 @@
-#container {
+.home-container {
   text-align: center;
+  margin-top: 50px;
 
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  h1 {
+    font-size: 28px;
+    margin-bottom: 12px;
+    color: #3880ff;
+  }
+
+  p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 30px;
+  }
+
+  .buttons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px; // espacio entre botones
+  }
+
+  // Botón Comenzar Test
+  .btn-test {
+    width: 200px; // ancho fijo
+    --background: linear-gradient(45deg, #4CAF50, #81C784);
+    --border-radius: 25px;
+    --box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 10px 0;
+    transition: transform 0.2s;
+  }
+  .btn-test:hover {
+    transform: scale(1.05);
+  }
+
+  // Botón Ver Resultados
+  .btn-result {
+    width: 200px; // ancho fijo
+    --background: linear-gradient(45deg, #2196F3, #64B5F6);
+    --border-radius: 25px;
+    --box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 10px 0;
+    transition: transform 0.2s;
+  }
+  .btn-result:hover {
+    transform: scale(1.05);
+  }
+
+ion-card {
+  margin-top: 40px;
+  margin-left: 20px;
+  margin-right: 20px;
+  text-align: left;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+
+  ion-card-header {
+    display: flex;
+    flex-direction: column;
+  }
+
+  ion-card-title {
+    color: #e60000;
+    font-weight: bold;
+	padding-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    display: block;
+  }
+
+  ion-card-content {
+    font-size: 14px;
+    color: #07070767;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
-
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
 }

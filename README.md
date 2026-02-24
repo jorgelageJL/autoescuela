@@ -68,6 +68,7 @@ _e instalas 'IONIC' como paquete de npm :_
 npm install -g @ionic/cli
 npm install @capacitor/core @capacitor/cli
 npm install @capacitor/camera
+npm install @ionic/storage-angular
 ```
 
 _Finalmente ejecutas el servidor 'frontend' de IONIC con el comando:_

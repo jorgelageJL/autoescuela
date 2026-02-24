@@ -30,13 +30,13 @@ export class UsuarioService {
     );
   }
 
-  async deleteAlumno(id: string) {
+  async deleteAlumno(id: number) {
     return firstValueFrom(
       this.httpClient.delete(`${this.endPoint}/alumnos/${id}`)
     );
   }
 
-  async deleteProfesor(id: string) {
+  async deleteProfesor(id: number) {
     return firstValueFrom(
       this.httpClient.delete(`${this.endPoint}/profesors/${id}`)
     );
@@ -67,23 +67,32 @@ export class UsuarioService {
   }
 
   async updateAlumno(usuario: any) {
-    // let formData = new FormData();
-    // formData.append("id_alumno", alumno.id_alumno);
-    // formData.append("nombre", alumno.nombre);
-    // formData.append("apellidos", alumno.apellidos);
-    // formData.append("dni", alumno.dni);
-    // formData.append("email", alumno.email);
-    // formData.append("password", alumno.password);
-    // formData.append("id_profesor", alumno.id_profesor);
-    // console.log(formData)
+    const user = {
+      nombre: usuario.nombre,
+      apellidos: usuario.apellidos,
+      dni: usuario.dni,
+      email: usuario.email,
+      password: usuario.password,
+      id_profesor: usuario.id_profesor,
+    };
+
     return firstValueFrom(
-      this.httpClient.put(`${this.endPoint}/alumnos/${usuario.id_alumno}`, usuario)
+      this.httpClient.put(`${this.endPoint}/alumnos/${usuario.id_alumno}`, user)
     );
   }
 
   async updateProfesor(usuario: any) {
+    const user = {
+      nombre: usuario.nombre,
+      apellidos: usuario.apellidos,
+      dni: usuario.dni,
+      email: usuario.email,
+      password: usuario.password,
+      id_admin: usuario.id_admin,
+    };
+
     return firstValueFrom(
-      this.httpClient.put(`${this.endPoint}/profesors/${usuario.id_profesor}`, usuario)
+      this.httpClient.put(`${this.endPoint}/profesors/${usuario.id_profesor}`, user)
     );
   }
 

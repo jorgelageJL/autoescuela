@@ -1,0 +1,61 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Register</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Register</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <form #form="ngForm" (ngSubmit)="register(form)">
+    <ion-grid>
+      <ion-row color="primary" class="ion-justify-content-center">
+        <ion-col size="6" size-lg="5" size-xs="12">
+          <div>
+            <h3>Create your account!</h3>
+          </div>
+          
+          <ion-item>
+            <ion-input type="text" name="name" placeholder="Name" ngModel required></ion-input>
+            <ion-text color="danger" *ngIf="form.controls['name']?.touched && form.controls['name']?.errors?.['required']">
+              obligatorio
+            </ion-text>
+          </ion-item>
+      
+          <ion-item lines="full">
+            <ion-input type="email" name="email" placeholder="your@email.com" ngModel required></ion-input>
+            <ion-text color="danger" *ngIf="form.controls['email']?.touched && form.controls['email']?.errors?.['required']">
+              obligatorio
+            </ion-text>
+          </ion-item>
+      
+          <ion-item lines="full">
+            <ion-input type="password" name="password" placeholder="Password" ngModel required></ion-input>
+            <ion-text color="danger" *ngIf="form.controls['password']?.touched && form.controls['password']?.errors?.['required']">
+              obligatorio
+            </ion-text>
+          </ion-item>
+      
+          <ion-item lines="full">
+            <ion-input type="password" name="confirm" placeholder="Password again" ngModel required></ion-input>
+            <ion-text color="danger" *ngIf="form.controls['confirm']?.touched && form.controls['confirm']?.errors?.['required']">
+              obligatorio
+            </ion-text>
+            <ion-text color="danger" *ngIf="form.value.password && form.value.confirm && form.value.password !== form.value.confirm">
+              Las contraseñas no coinciden
+            </ion-text>
+          </ion-item>
+          
+          <ion-button size="large" type="submit" [disabled]="form.invalid || form.value.password !== form.value.confirm" expand="block">Register</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>
