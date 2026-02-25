@@ -9,11 +9,18 @@ import { AuthService } from '../services/auth.service';
 	standalone: false,
 })
 export class HomePage {
+	rol: string = '';
 
 	constructor(
 		private router: Router,
 		private authService: AuthService,
 	) { }
+
+	async ionViewWillEnter() {
+		let user = await this.authService.getUserLogued();
+		this.rol = user.rol;
+		console.log("mi rol: " + this.rol);
+	}
 
 	goToTests() {
 		this.router.navigateByUrl("list-tests");
@@ -28,7 +35,11 @@ export class HomePage {
 	}
 
 	goToTestsAdmin() {
-		this.router.navigateByUrl("admin-tests");
+		this.router.navigateByUrl("list-tests");
+	}
+
+	goToPreguntas() {
+		this.router.navigateByUrl("list-preguntas");
 	}
 
 	logout() {

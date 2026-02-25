@@ -4,7 +4,7 @@ export interface AuthResponse {
         nombre: string;
         email: string;
         password: string;
-        isAdmin: boolean;
+        rol: string;
     },
     access_token: string
 }

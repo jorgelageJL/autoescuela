@@ -21,15 +21,27 @@
           <div class="ion-text-center">
             <ion-item>
               <ion-input type="email" name="email" placeholder="your@email.com" ngModel required></ion-input>
-              <ion-text color="danger" *ngIf="form.controls['email']?.touched && form.controls['email']?.errors?.['required']">
+              <ion-text color="danger"
+                *ngIf="form.controls['email']?.touched && form.controls['email']?.errors?.['required']">
                 obligatorio
               </ion-text>
             </ion-item>
+
             <ion-item>
               <ion-input type="password" name="password" placeholder="Password" ngModel required></ion-input>
-              <ion-text color="danger" *ngIf="form.controls['password']?.touched && form.controls['password']?.errors?.['required']">
+              <ion-text color="danger"
+                *ngIf="form.controls['password']?.touched && form.controls['password']?.errors?.['required']">
                 obligatorio
               </ion-text>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>Selecciona un rol</ion-label>
+              <ion-select [(ngModel)]="rol" name="rol" required>
+                <ion-select-option value="alumnos">Alumno</ion-select-option>
+                <ion-select-option value="profesors">Profesor</ion-select-option>
+                <ion-select-option value="administradors">Administrador</ion-select-option>
+              </ion-select>
             </ion-item>
           </div>
           <div class="ion-text-center">

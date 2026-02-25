@@ -5,7 +5,7 @@ module.exports = app => {
   let upload = require('../multer/upload');
 
   // Create a new Pregunta
-  router.post("/", auth.isAuthenticated, upload.single('filename'), Pregunta.create);
+  router.post("/", auth.isAdmin, upload.single('filename'), Pregunta.create);
 
   // Retrieve all Preguntas
   router.get("/", auth.isAuthenticated, Pregunta.findAll);
@@ -17,7 +17,7 @@ module.exports = app => {
   router.get("/id_test/:id", auth.isAuthenticated, Pregunta.findAllByTest);
 
   // Update Pregunta by id
-  router.put("/:id", auth.isAuthenticated, (req, res, next) => {
+  router.put("/:id", auth.isAdmin, (req, res, next) => {
     upload.single('filename')(req, res, function (err) {
       if (err) console.log("Error multer:", err);
       next();
@@ -25,7 +25,7 @@ module.exports = app => {
   }, Pregunta.update);
 
   // Delete Pregunta by id
-  router.delete("/:id", auth.isAuthenticated, Pregunta.delete);
+  router.delete("/:id", auth.isAdmin, Pregunta.delete);
 
   // // Delete all Preguntas
   // router.delete("/", auth.isAuthenticated, Pregunta.deleteAll);

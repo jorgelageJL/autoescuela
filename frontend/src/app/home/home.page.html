@@ -9,7 +9,7 @@
   <ion-content>
     <ion-list>
 
-      <ion-item button (click)="goToUsersAdmin()">
+      <ion-item button *ngIf="rol === 'administradors' || rol === 'profesors'" (click)="goToUsersAdmin()">
         <ion-icon name="people-outline" slot="start"></ion-icon>
         <ion-label>
           <h2>Gestión de Alumnos</h2>
@@ -17,10 +17,18 @@
         </ion-label>
       </ion-item>
 
-      <ion-item button (click)="goToTestsAdmin()">
+      <ion-item button *ngIf="rol === 'administradors' || rol === 'profesors'" (click)="goToTestsAdmin()">
         <ion-icon name="create-outline" slot="start"></ion-icon>
         <ion-label>
           <h2>Gestión de Tests</h2>
+          <p>Administrar test</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item button *ngIf="rol === 'administradors' || rol === 'profesors'" (click)="goToPreguntas()">
+        <ion-icon name="create-outline" slot="start"></ion-icon>
+        <ion-label>
+          <h2>Gestión de Preguntas</h2>
           <p>Administrar preguntas y exámenes (CRUD)</p>
         </ion-label>
       </ion-item>

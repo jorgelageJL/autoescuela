@@ -22,8 +22,13 @@ export class ListResultadosPage {
 
   async getAll() {
     const user = await this.authService.getUserLogued();
-    console.log("id a enviar: " + user.id)
+    // console.log(user)
     this.resultados = await this.resultadoService.getAllResultadosByAlumno(user.id);
+    let prom = 0;
+    for (let i of this.resultados) {
+      prom += i.nota;
+    }
+    console.log("promedio: " + prom)
   }
 
   ionViewWillEnter() {

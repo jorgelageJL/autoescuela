@@ -11,7 +11,7 @@ import { CanActivate, Router } from '@angular/router';
 })
 export class AuthService implements CanActivate {
   initializedStorage: boolean = false;
-  endPoint: string = 'http://localhost:8080/api/alumnos';
+  endPoint: string = 'http://localhost:8080/api';
   // endPoint: string = 'http://localhost:8080/api/administradors';
 
   constructor(
@@ -71,8 +71,19 @@ export class AuthService implements CanActivate {
     return true;
   }
 
-  register(user: User): Observable<AuthResponse> {
-    return this.httpClient.post<AuthResponse>(this.endPoint, user, this.getBasicHeaders(user)).pipe(
+  async hasPermiso(): Promise<boolean> {
+    const rol = await this.getUserLogued();
+
+    if (!rol.isAdmin) {
+      this.router.navigateByUrl('login');
+      return false;
+    }
+
+    return true;
+  }
+
+  register(user: User, rol: string): Observable<AuthResponse> {
+    return this.httpClient.post<AuthResponse>(`${this.endPoint}/${rol}`, user, this.getBasicHeaders(user)).pipe(
       tap(async (res: AuthResponse) => {
         if (res.user) {
           await this.storage.set("token", res.access_token);
@@ -94,18 +105,22 @@ export class AuthService implements CanActivate {
   //   );
   // }
 
-  async login(user: User): Promise<AuthResponse> {
+  async login(user: User, rol: string): Promise<AuthResponse> {
     const res = await firstValueFrom(
       this.httpClient.post<AuthResponse>(
-        `${this.endPoint}/signin`, 
+        `${this.endPoint}/${rol}/signin`, 
         null, 
         this.getBasicHeaders(user)
       )
     );
 
+    res.user.rol = rol
+    console.log(res.user)
+
     if (res.user) {
       await this.storage.set('user', res.user);
       await this.storage.set('token', res.access_token);
+      await this.storage.set('rol', rol);
     }
 
     return res;

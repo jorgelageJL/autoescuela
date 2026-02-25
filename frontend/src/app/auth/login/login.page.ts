@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { AlertController } from '@ionic/angular';
@@ -11,7 +11,8 @@ import { User } from '../user';
   styleUrls: ['./login.page.scss'],
   standalone: false,
 })
-export class LoginPage implements OnInit {
+export class LoginPage {
+  rol: string = 'alumnos';
 
   constructor(
     private router: Router,
@@ -19,24 +20,29 @@ export class LoginPage implements OnInit {
     private authService: AuthService,
   ) { }
 
-  ngOnInit() {
-  }
-
   async login(form: NgForm) {
     form.control.updateValueAndValidity();
+
+    // this.rol = form.value.rol;
+    // console.log("rol: " + this.rol)
 
     try {
       let user: User = {
         // id: null,
         email: form.value.email,
         password: form.value.password,
+        rol: form.value.rol,
         // name: null,
         // isAdmin: null
       };
-      const res = await this.authService.login(user);
+      const res = await this.authService.login(user, this.rol);
       if (res.user/* || res.access_token*/) {
+        let user = await this.authService.getUserLogued();
+        console.log(user.rol)
         form.reset();
         this.router.navigateByUrl('home');
+      } else {
+        this.presentAlert("invalid credentials");
       }
     } catch (err) {
       console.error(err);
