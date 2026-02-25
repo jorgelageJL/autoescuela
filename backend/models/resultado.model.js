@@ -13,7 +13,8 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
     },
     fecha: {
-      type: 'DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL',
+      // type: 'DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL',
+      type: Sequelize.DATE,
       allowNull: false,
       defaultValue: () => new Date()
     },

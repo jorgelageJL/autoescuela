@@ -6,8 +6,11 @@ module.exports = app => {
   // Create a new Resultado
   router.post("/", auth.isAuthenticated, Resultado.upsert);
 
-  // Retrieve all Resultados
-  router.get("/", auth.isAuthenticated, Resultado.findAll);
+  // // Retrieve all Resultados
+  // router.get("/", auth.isAuthenticated, Resultado.findAll);
+
+  // Retrieve all Resultados by Alumno
+  router.get("/:id", auth.isAuthenticated, Resultado.findAllByAlumno);
   
   // Retrieve a single Resultado by id Test
   router.get("/test/:id", auth.isAuthenticated, Resultado.findAlumnoByIdTest);

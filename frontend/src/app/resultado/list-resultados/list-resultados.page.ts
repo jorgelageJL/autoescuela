@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ResultadoService } from 'src/app/services/resultado-service';
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,13 +14,16 @@ export class ListResultadosPage {
 
   constructor(
     private resultadoService: ResultadoService,
+    private authService: AuthService,
     private router: Router,
   ) {
     this.ionViewWillEnter();
   }
 
   async getAll() {
-    this.resultados = await this.resultadoService.getAllResultados();
+    const user = await this.authService.getUserLogued();
+    console.log("id a enviar: " + user.id)
+    this.resultados = await this.resultadoService.getAllResultadosByAlumno(user.id);
   }
 
   ionViewWillEnter() {

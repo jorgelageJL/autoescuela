@@ -69,6 +69,27 @@ exports.findOne = (req, res) => {
     });
 };
 
+// Find all Resultados by id
+exports.findAllByAlumno = (req, res) => {
+  const id = req.params.id;
+
+  Resultado.findAll({ where: { id_alumno: id } })
+    .then(data => {
+      if (data) {
+        res.status(200).send(data);
+      } else {
+        res.status(404).send({
+          message: `Resultado with id_alumno=${id_alumno} was not found.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving Resultado with id=" + id
+      });
+    });
+};
+
 // Create a new Resultado
 exports.create = async (req, res) => {
   if (!req.body.id_test || !req.body.id_alumno || req.body.nota < 0) {

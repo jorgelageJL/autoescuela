@@ -14,9 +14,9 @@ export class ResultadoService {
     private authService: AuthService,
   ) { }
 
-  async getAllResultados() {
+  async getAllResultadosByAlumno(id: number) {
     return firstValueFrom(
-      this.httpClient.get(this.endPoint, this.authService.getBearerHeaders(await this.authService.getToken()))
+      this.httpClient.get(`${this.endPoint}/${id}`, this.authService.getBearerHeaders(await this.authService.getToken()))
     );
   }
 

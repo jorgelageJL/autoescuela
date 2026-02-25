@@ -11,7 +11,8 @@ import { CanActivate, Router } from '@angular/router';
 })
 export class AuthService implements CanActivate {
   initializedStorage: boolean = false;
-  endPoint: string = 'http://localhost:8080/api/administradors';
+  endPoint: string = 'http://localhost:8080/api/alumnos';
+  // endPoint: string = 'http://localhost:8080/api/administradors';
 
   constructor(
     private httpClient: HttpClient,

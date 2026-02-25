@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { PreguntaService } from 'src/app/services/pregunta-service';
 import { ResultadoService } from 'src/app/services/resultado-service';
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -18,8 +18,8 @@ export class TestPage {
   testForm!: FormGroup;
 
   constructor(
-    private preguntaService: PreguntaService,
     private resultadoService: ResultadoService,
+    private authService: AuthService,
     private router: Router,
     public formBuilder: FormBuilder,
   ) { }
@@ -71,19 +71,19 @@ export class TestPage {
     // console.log("Resultado:", correctas, "de", this.preguntas.length);
     alert(`Resultado: ${correctas} de ${this.preguntas.length}`)
 
+    const user = await this.authService.getUserLogued();
+    console.log("logueado: " + user.id, user.nombre, user.email);
+
     this.resultado = {
       id_test: this.id_test,
-      id_alumno: 1,
+      id_alumno: user.id,
+      fecha: Date.now(),
       nota: correctas
     };
 
     console.log(this.resultado)
 
-    // try {
     await this.resultadoService.createResultado(this.resultado);
-    // } catch (error) {
-    //   await this.resultadoService.updateResultado(this.resultado);
-    // }
     this.router.navigateByUrl("list-resultados");
   }
 
