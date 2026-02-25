@@ -1,75 +1,100 @@
 const db = require("../models");
 const Profesor = db.Profesor;
-const Op = db.Sequelize.Op;
-// const utils = require("../utils.js");
-// const  bcrypt  =  require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
-// Create new Profesor
-exports.create = (req, res) => {
-  // Validate request
-  if (!req.body.nombre || !req.body.apellidos || !req.body.dni
-    || !req.body.email || !req.body.password || !req.body.id_admin) {
-    res.status(400).send({
-      message: "Content can not be empty!"
-    });
-    return;
-  }
+exports.signin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-  // Create Profesor
-  const profesor = {
-    nombre: req.body.nombre,
-    apellidos: req.body.apellidos,
-    dni: req.body.dni,
-    email: req.body.email,
-    password: req.body.password,
-    id_admin: req.body.id_admin
-  };
-
-  // Profesor.findOne({ where: { dni: Profesor.dni } })
-  //   .then(data => {
-  //     if (data) {
-  //       const result = bcrypt.compareSync(Profesor.password, data.password);
-  //       if (!result) return res.status(401).send('Password not valid!');
-  //       const token = utils.generateToken(data);
-  //       // get basic user details
-  //       const userObj = utils.getCleanUser(data);
-  //       // return the token along with user details
-  //       return res.json({ user: userObj, access_token: token });
-  //     }
-
-  //     administrador.password = bcrypt.hashSync(req.body.password);
-
-  // Save new Administrador in the database
-  Profesor.create(profesor)
-    .then(data => {
-      // const token = utils.generateToken(data);
-      // get basic user details
-      // const userObj = utils.getCleanUser(data);
-      // return the token along with user details
-      // return res.json({ user: userObj, access_token: token });
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Profesor."
+    if (!email || !password) {
+      return res.status(400).json({
+        error: true,
+        message: "Email and Password required."
       });
+    }
+
+    const user = await Profesor.findOne({ where: { email } });
+
+    if (!user) {
+      return res.status(401).json({
+        error: true,
+        message: "Profesor not found."
+      });
+    }
+
+    const passwordIsValid = bcrypt.compareSync(password, user.password);
+
+    if (!passwordIsValid) {
+      return res.status(401).json({
+        error: true,
+        message: "Invalid password."
+      });
+    }
+
+    // Payload limpio
+    const payload = {
+      id: user.id_profesor,
+      nombre: user.nombre,
+      email: user.email,
+      password: user.password,
+      isAdmin: false
+    };
+
+    const token = jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: "8h" }
+    );
+
+    return res.status(200).json({
+      user: payload,
+      access_token: token
     });
 
-  // })
-  // .catch(err => {
-  //   res.status(500).send({
-  //     message:
-  //       err.message || "Some error occurred while retrieving tutorials."
-  //   });
-  // });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message || "Signin error"
+    });
+  }
 };
+
+// exports.isAuthenticated = async (req, res, next) => {
+//   try {
+//     const authHeader = req.headers.authorization;
+
+//     if (!authHeader) {
+//       return res.status(401).json({
+//         message: "No token provided."
+//       });
+//     }
+
+//     const token = authHeader.split(" ")[1]; // Bearer TOKEN
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//     console.log(decoded)
+//     const user = await Profesor.findByPk(decoded.id);
+
+//     if (!user) {
+//       return res.status(401).json({
+//         message: "Invalid Profesor."
+//       });
+//     }
+
+//     req.user = decoded; // guardar datos del usuario
+//     next();
+
+//   } catch (err) {
+//     return res.status(401).json({
+//       message: "Invalid or expired token."
+//     });
+//   }
+// };
 
 // Retrieve all Profesors from the database.
 exports.findAll = (req, res) => {
   Profesor.findAll()
     .then(data => {
-      res.send(data);
+      res.status(200).send(data);
     })
     .catch(err => {
       res.status(500).send({
@@ -86,9 +111,9 @@ exports.findOne = (req, res) => {
   Profesor.findByPk(id)
     .then(data => {
       if (data) {
-        res.send(data);
+        res.status(200).send(data);
       } else {
-        res.send({
+        res.status(400).send({
           message: `Profesor with id=${id} was not found.`
         });
       }
@@ -116,7 +141,7 @@ exports.findByPasswordAndDniOrEmail = (req, res) => {
 
   Profesor.findOne({ where: condition })
     .then(data => {
-      res.send(data);
+      res.status(200).send(data);
     })
     .catch(err => {
       res.status(500).send({
@@ -126,29 +151,82 @@ exports.findByPasswordAndDniOrEmail = (req, res) => {
     });
 };
 
-// Update Profesor by id
-exports.update = (req, res) => {
-  const id = req.params.id;
-
-  Profesor.update(req.body, {
-    where: { id_profesor: id }
-  })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: "Profesor was updated successfully."
-        });
-      } else {
-        res.send({
-          message: `Cannot update Profesor with id=${id}. Maybe Profesor was not found or req.body is empty!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Error updating Profesor with id=" + id
-      });
+// Create a new Profesor
+exports.create = async (req, res) => {
+  if (!req.body || !req.body.nombre || !req.body.apellidos || !req.body.dni
+    || !req.body.email || !req.body.password || !req.body.id_admin) {
+    return res.status(400).send({
+      message: "Content can not be empty!"
     });
+  }
+
+  try {
+    const user = {
+      nombre: req.body.nombre,
+      apellidos: req.body.apellidos,
+      dni: req.body.dni,
+      email: req.body.email,
+      password: bcrypt.hashSync(req.body.password, 8),
+      id_admin: req.body.id_admin
+    };
+
+    const data = await Profesor.create(user);
+    res.status(200).send(data);
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || "Error creating Profesor"
+    });
+  }
+};
+
+// Update Profesor by id
+exports.update = async (req, res) => {
+  if (!req.body || Object.keys(req.body).length === 0) {
+    return res.status(400).send({
+      message: "Content can not be empty!"
+    });
+  }
+
+  const id = req.params.id;
+  try {
+    const user = {};
+
+    if (req.body.nombre)
+      user.nombre = req.body.nombre;
+
+    if (req.body.apellidos)
+      user.apellidos = req.body.apellidos;
+
+    if (req.body.dni)
+      user.dni = req.body.dni;
+
+    if (req.body.email)
+      user.email = req.body.email;
+
+    if (req.body.password)
+      user.password = bcrypt.hashSync(req.body.password, 8);
+
+    if (req.body.id_admin)
+      user.id_admin = req.body.id_admin;
+
+    const [num] = await Profesor.update(user, {
+      where: { id_profesor: id }
+    });
+
+    if (num == 1) {
+      res.status(200).send({
+        message: "Profesor was updated successfully."
+      });
+    } else {
+      res.status(400).send({
+        message: `Cannot update Profesor with id=${id}. Maybe Profesor was not found or req.body is empty!`
+      });
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: "Error updating Profesor with id=" + id
+    });
+  }
 };
 
 // Delete Profesor by id
@@ -160,11 +238,11 @@ exports.delete = (req, res) => {
   })
     .then(num => {
       if (num == 1) {
-        res.send({
+        res.status(200).send({
           message: "Profesor was deleted successfully!"
         });
       } else {
-        res.send({
+        res.status(400).send({
           message: `Cannot delete Profesor with id=${id}. Maybe Profesor was not found!`
         });
       }
@@ -183,7 +261,7 @@ exports.deleteAll = (req, res) => {
     truncate: false
   })
     .then(nums => {
-      res.send({ message: `${nums} Profesors were deleted successfully!` });
+      res.status(200).send({ message: `${nums} Profesors were deleted successfully!` });
     })
     .catch(err => {
       res.status(500).send({

@@ -14,16 +14,16 @@ exports.signin = async (req, res) => {
       });
     }
 
-    const admin = await Administrador.findOne({ where: { email } });
+    const user = await Administrador.findOne({ where: { email } });
 
-    if (!admin) {
+    if (!user) {
       return res.status(401).json({
         error: true,
         message: "Administrador not found."
       });
     }
 
-    const passwordIsValid = bcrypt.compareSync(password, admin.password);
+    const passwordIsValid = bcrypt.compareSync(password, user.password);
 
     if (!passwordIsValid) {
       return res.status(401).json({
@@ -34,10 +34,10 @@ exports.signin = async (req, res) => {
 
     // Payload limpio
     const payload = {
-      id: admin.id_admin,
-      nombre: admin.nombre,
-      email: admin.email,
-      password: admin.password,
+      id: user.id_admin,
+      nombre: user.nombre,
+      email: user.email,
+      password: user.password,
       isAdmin: true
     };
 
@@ -47,7 +47,7 @@ exports.signin = async (req, res) => {
       { expiresIn: "8h" }
     );
 
-    return res.json({
+    return res.status(200).json({
       user: payload,
       access_token: token
     });
@@ -59,44 +59,42 @@ exports.signin = async (req, res) => {
   }
 };
 
-exports.isAuthenticated = async (req, res, next) => {
-  try {
-    const authHeader = req.headers.authorization;
+// exports.isAuthenticated = async (req, res, next) => {
+//   try {
+//     const authHeader = req.headers.authorization;
 
-    if (!authHeader) {
-      return res.status(401).json({
-        message: "No token provided."
-      });
-    }
+//     if (!authHeader) {
+//       return res.status(401).json({
+//         message: "No token provided."
+//       });
+//     }
 
-    const token = authHeader.split(" ")[1]; // Bearer TOKEN
+//     const token = authHeader.split(" ")[1]; // Bearer TOKEN
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//     console.log(decoded)
+//     const user = await Administrador.findByPk(decoded.id);
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decoded)
+//     if (!user) {
+//       return res.status(401).json({
+//         message: "Invalid Administrador."
+//       });
+//     }
 
-    const admin = await Administrador.findByPk(decoded.id);
+//     req.user = decoded; // guardar datos del usuario
+//     next();
 
-    if (!admin) {
-      return res.status(401).json({
-        message: "Invalid user."
-      });
-    }
-
-    req.user = decoded; // guardar datos del usuario
-    next();
-
-  } catch (err) {
-    return res.status(401).json({
-      message: "Invalid or expired token."
-    });
-  }
-};
+//   } catch (err) {
+//     return res.status(401).json({
+//       message: "Invalid or expired token."
+//     });
+//   }
+// };
 
 // Retrieve all Administradors from the database.
 exports.findAll = (req, res) => {
   Administrador.findAll()
     .then(data => {
-      res.send(data);
+      res.status(200).send(data);
     })
     .catch(err => {
       res.status(500).send({
@@ -113,9 +111,9 @@ exports.findOne = (req, res) => {
   Administrador.findByPk(id)
     .then(data => {
       if (data) {
-        res.send(data);
+        res.status(200).send(data);
       } else {
-        res.send({
+        res.status(404).send({
           message: `Administrador with id=${id} was not found.`
         });
       }
@@ -171,8 +169,15 @@ exports.findByPasswordAndDniOrEmail = (req, res) => {
 
 // Create a new Administrador
 exports.create = async (req, res) => {
+  if (!req.body || !req.body.nombre || !req.body.apellidos
+    || !req.body.dni || !req.body.email || !req.body.password) {
+    return res.status(400).send({
+      message: "Content can not be empty!"
+    });
+  }
+
   try {
-    const administrador = {
+    const user = {
       nombre: req.body.nombre,
       apellidos: req.body.apellidos,
       dni: req.body.dni,
@@ -180,8 +185,8 @@ exports.create = async (req, res) => {
       password: bcrypt.hashSync(req.body.password, 8)
     };
 
-    const data = await Administrador.create(administrador);
-    res.send(data);
+    const data = await Administrador.create(user);
+    res.status(200).send(data);
   } catch (err) {
     res.status(500).send({
       message: err.message || "Error creating Administrador"
@@ -190,36 +195,50 @@ exports.create = async (req, res) => {
 };
 
 // Update an Administrador by id
-exports.update = (req, res) => {
-  const id = req.params.id;
-
-  const administrador = {
-    nombre: req.body.nombre,
-    apellidos: req.body.apellidos,
-    dni: req.body.dni,
-    email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8)
-  };
-
-  Administrador.update(administrador, {
-    where: { id_admin: id }
-  })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: "Administrador was updated successfully."
-        });
-      } else {
-        res.send({
-          message: `Cannot update Administrador with id=${id}. Maybe Administrador was not found or req.body is empty!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Error updating Administrador with id=" + id
-      });
+exports.update = async (req, res) => {
+  if (!req.body || Object.keys(req.body).length === 0) {
+    return res.status(400).send({
+      message: "Content can not be empty!"
     });
+  }
+
+  const id = req.params.id;
+  try {
+    const user = {};
+
+    if (req.body.nombre)
+      user.nombre = req.body.nombre;
+
+    if (req.body.apellidos)
+      user.apellidos = req.body.apellidos;
+
+    if (req.body.dni)
+      user.dni = req.body.dni;
+
+    if (req.body.email)
+      user.email = req.body.email;
+
+    if (req.body.password)
+      user.password = bcrypt.hashSync(req.body.password, 8);
+
+    const [num] = await Administrador.update(user, {
+      where: { id_admin: id }
+    });
+
+    if (num == 1) {
+      res.status(200).send({
+        message: "Administrador was updated successfully."
+      });
+    } else {
+      res.status(400).send({
+        message: `Cannot update Administrador with id=${id}. Maybe Administrador was not found or req.body is empty!`
+      });
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: "Error updating Administrador with id=" + id
+    });
+  };
 };
 
 // Delete an Administrador by id
@@ -231,11 +250,11 @@ exports.delete = (req, res) => {
   })
     .then(num => {
       if (num == 1) {
-        res.send({
+        res.status(200).send({
           message: "Administrador was deleted successfully!"
         });
       } else {
-        res.send({
+        res.status(400).send({
           message: `Cannot delete Administrador with id=${id}. Maybe Administrador was not found!`
         });
       }
@@ -254,7 +273,7 @@ exports.deleteAll = (req, res) => {
     truncate: false
   })
     .then(nums => {
-      res.send({ message: `${nums} Administradors were deleted successfully!` });
+      res.status(200).send({ message: `${nums} Administradors were deleted successfully!` });
     })
     .catch(err => {
       res.status(500).send({

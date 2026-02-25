@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,23 +11,24 @@ export class PreguntaService {
 
   constructor(
     private httpClient: HttpClient,
+    private authService: AuthService,
   ) { }
 
   async getAllPreguntas() {
     return firstValueFrom(
-      this.httpClient.get(this.endPoint)
+      this.httpClient.get(this.endPoint, this.authService.getBearerHeaders(await this.authService.getToken()))
     );
   }
 
   async getAllPreguntasDelTest(id_test: string): Promise<any[]> {
     return await firstValueFrom(
-      this.httpClient.get<any[]>(`${this.endPoint}/id_test/${id_test}`)
+      this.httpClient.get<any[]>(`${this.endPoint}/id_test/${id_test}`, this.authService.getBearerHeaders(await this.authService.getToken()))
     );
   }
 
   async deletePregunta(id: string) {
     return firstValueFrom(
-      this.httpClient.delete(`${this.endPoint}/${id}`)
+      this.httpClient.delete(`${this.endPoint}/${id}`, this.authService.getBearerHeaders(await this.authService.getToken()))
     );
   }
 
@@ -40,8 +42,9 @@ export class PreguntaService {
     formData.append("tema", pregunta.tema);
     formData.append("id_test", pregunta.id_test);
     formData.append("filename", blob, "photo.jpg");
+
     return firstValueFrom(
-      this.httpClient.post(this.endPoint, formData)
+      this.httpClient.post(this.endPoint, formData, this.authService.getBearerHeaders(await this.authService.getToken()))
     );
   }
 
@@ -55,11 +58,13 @@ export class PreguntaService {
     formData.append("respuesta", pregunta.respuesta);
     formData.append("tema", pregunta.tema);
     formData.append("id_test", pregunta.id_test);
+
     if (blob) {
       formData.append("filename", blob, "photo.jpg");
     }
+
     return firstValueFrom(
-      this.httpClient.put(`${this.endPoint}/${pregunta.id_pregunta}`, formData)
+      this.httpClient.put(`${this.endPoint}/${pregunta.id_pregunta}`, formData, this.authService.getBearerHeaders(await this.authService.getToken()))
     );
   }
 }

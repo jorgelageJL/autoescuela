@@ -6,8 +6,8 @@ const app = express();
 const jwt = require('jsonwebtoken');
 
 let corsOptions = {
-  origin: '*',
-  // origin: 'http://localhost:8100',
+  // origin: '*',
+  origin: 'http://localhost:8100',
   credentials: true,
   // allowedHeaders: ['Content-Type', 'Authorization'],
   // methods: ['GET', 'POST', 'PUT', 'DELETE'],

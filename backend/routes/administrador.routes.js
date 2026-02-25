@@ -1,5 +1,6 @@
 module.exports = app => {
   const Administrador = require("../controllers/administrador.controller.js");
+  const auth = require("../controllers/auth.js");
   const router = require("express").Router();
 
   // Sign in
@@ -9,22 +10,22 @@ module.exports = app => {
   router.post("/", Administrador.create);
 
   // Retrieve all Administradors
-  router.get("/", Administrador.isAuthenticated, Administrador.findAll);
+  router.get("/", auth.isAuthenticated, Administrador.findAll);
 
   // Retrieve a single Administrador by id
-  router.get("/:id", Administrador.isAuthenticated, Administrador.findOne);
+  router.get("/:id", auth.isAuthenticated, Administrador.findOne);
 
   // // Retrieve a single Administrador by dni or email
   // router.get("/dni_email/:field", /*auth.isAuthenticated,*/ administrador.findByDniOrEmail);
 
   // Update an Administrador by id
-  router.put("/:id", Administrador.isAuthenticated, Administrador.update);
+  router.put("/:id", auth.isAuthenticated, Administrador.update);
 
   // Delete an Administrador by id
-  router.delete("/:id", Administrador.isAuthenticated, Administrador.delete);
+  router.delete("/:id", auth.isAuthenticated, Administrador.delete);
 
   // // Delete all Administradors
-  // router.delete("/", administrador.deleteAll);
+  // router.delete("/", auth.isAuthenticated, administrador.deleteAll);
 
   app.use('/api/administradors', router);
 };
